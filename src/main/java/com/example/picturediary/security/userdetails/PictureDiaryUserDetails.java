@@ -1,16 +1,25 @@
 package com.example.picturediary.security.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class PictureDiaryUserDetails implements UserDetails
 {
+    private final String userId;
+
+    public PictureDiaryUserDetails(Object userId)
+    {
+        this.userId = (String) userId;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -22,30 +31,30 @@ public class PictureDiaryUserDetails implements UserDetails
     @Override
     public String getUsername()
     {
-        return null;
+        return userId;
     }
 
     @Override
     public boolean isAccountNonExpired()
     {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked()
     {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired()
     {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled()
     {
-        return false;
+        return true;
     }
 }
