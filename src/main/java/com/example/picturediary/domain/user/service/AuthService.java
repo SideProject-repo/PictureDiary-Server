@@ -10,6 +10,7 @@ import com.example.picturediary.domain.user.request.SignUpRequest;
 import com.example.picturediary.domain.user.response.SignInResponse;
 import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.security.jwt.JwtUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,27 +25,10 @@ public class AuthService
         this.userRepository = userRepository;
     }
 
+    @ApiOperation("카카오 회원가입")
     public SignUpResponse signUp(SignUpRequest signUpRequest)
     {
         Long socialId = KakaoUtil.getUserIdFromKakaoToken(signUpRequest.getSocialToken());
-
-        if (userRepository.existsBySocialId(socialId))
-        {
-            String accessToken = JwtUtil.createAccessToken(socialId.toString());
-
-            return SignUpResponse.builder()
-                .accessToken(accessToken)
-                .build();
-        }
-        else
-        {
-            throw new CustomError(ErrorCodes.NOT_SIGN_IN_USER);
-        }
-    }
-
-    public SignInResponse signIn(SignInRequest signInRequest)
-    {
-        Long socialId = KakaoUtil.getUserIdFromKakaoToken(signInRequest.getSocialToken());
 
         if (!userRepository.existsBySocialId(socialId))
         {
@@ -56,13 +40,32 @@ public class AuthService
 
             String accessToken = JwtUtil.createAccessToken(socialId.toString());
 
+            return SignUpResponse.builder()
+                .accessToken(accessToken)
+                .build();
+        }
+        else
+        {
+            throw new CustomError(ErrorCodes.ALREADY_SIGN_UP_USER);
+        }
+    }
+
+    @ApiOperation("카카오 로그인")
+    public SignInResponse signIn(SignInRequest signInRequest)
+    {
+        Long socialId = KakaoUtil.getUserIdFromKakaoToken(signInRequest.getSocialToken());
+
+        if (userRepository.existsBySocialId(socialId))
+        {
+            String accessToken = JwtUtil.createAccessToken(socialId.toString());
+
             return SignInResponse.builder()
                 .accessToken(accessToken)
                 .build();
         }
         else
         {
-            throw new CustomError(ErrorCodes.ALREADY_SIGN_IN_USER);
+            throw new CustomError(ErrorCodes.ALREADY_SIGN_UP_USER);
         }
     }
 

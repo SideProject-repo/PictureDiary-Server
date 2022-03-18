@@ -28,32 +28,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Override
-    public void configure(WebSecurity web)
+    public void configure(WebSecurity web) throws Exception
     {
-        web.ignoring().antMatchers(
-            "/h2-console/**",
-            "/api/auth/sign-up",
-            "/api/auth/sign-in",
-            "/swagger-ui/**",
-            "/hi"
+        web.ignoring()
+            .antMatchers(
+                "/h2-console/**",
+                "/swagger-ui/**",
+                "/v2/api-docs",
+                "/configuration/**",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/swagger/**",
+                "/favicon.ico",
+                "/dont-pass-filter",
+                "/auth/**/sign-up",
+                "/auth/**/sign-in"
         );
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        // authentication
-        http.sessionManagement()
+        http
+            .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // disable session
+
             .and()
             .csrf().disable() // token 인증 방식은 csrf 방어할 필요없다.
             .exceptionHandling()
                 .authenticationEntryPoint(pictureDiaryAuthenticationEntryPoint)
-            .and()
-            // PictureDiaryCorsFilter -> UsernamePasswordAuthenticationFilter -> jwtAuthenticationFilter
-            .addFilterBefore(new PictureDiaryCorsFilter(), UsernamePasswordAuthenticationFilter.class)
-            .addFilterAfter(new JwtAuthenticationFilter(pictureDiaryUserDetailsService), UsernamePasswordAuthenticationFilter.class);
 
-        // authorization 은 아직 필요없다.
+            // PictureDiaryCorsFilter -> UsernamePasswordAuthenticationFilter -> jwtAuthenticationFilter
+            .and()
+            .addFilterBefore(new PictureDiaryCorsFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(pictureDiaryUserDetailsService), UsernamePasswordAuthenticationFilter.class);
     }
 }

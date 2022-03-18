@@ -16,7 +16,7 @@ import java.util.Date;
 public class JwtUtil
 {
     @Value("${spring.security.secret-key}")
-    private String secretKey;
+    private String secretKey = "com.picturediary.secret";
 
     @Value("${spring.security.access-token-valid-time}")
     private String accessTokenValidTime = "1000000000000";

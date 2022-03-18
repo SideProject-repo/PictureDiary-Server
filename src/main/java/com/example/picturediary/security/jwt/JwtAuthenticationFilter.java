@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends GenericFilterBean
+public class JwtAuthenticationFilter extends OncePerRequestFilter
 {
     private final PictureDiaryUserDetailsService pictureDiaryUserDetailsService;
 
@@ -30,30 +31,31 @@ public class JwtAuthenticationFilter extends GenericFilterBean
     }
 
     @Override
-    public void doFilter(
-        ServletRequest request,
-        ServletResponse response,
-        FilterChain chain) throws IOException
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException
     {
         try {
-            String token = JwtUtil.getTokenFromHeader((HttpServletRequest) request);
+            String token = JwtUtil.getTokenFromHeader(request);
 
             PictureDiaryUserDetails userDetails
                 = (PictureDiaryUserDetails) pictureDiaryUserDetailsService.loadUserByUsername(token);
 
             SecurityContextHolder.getContext().setAuthentication((Authentication) userDetails);
 
+            filterChain.doFilter(request, response);
         } catch (MalformedJwtException e)
         {
-            ResponseUtil.doResponse((HttpServletResponse) response, ErrorCodes.JWT_INVALID_AUTH_TOKEN);
+            ResponseUtil.doResponse(response, ErrorCodes.JWT_INVALID_AUTH_TOKEN);
         }
         catch (SignatureException e)
         {
-            ResponseUtil.doResponse((HttpServletResponse) response, ErrorCodes.JWT_ILLEGAL_AUTH_TOKEN);
+            ResponseUtil.doResponse(response, ErrorCodes.JWT_ILLEGAL_AUTH_TOKEN);
         }
         catch (Exception e)
         {
-            ResponseUtil.doResponse((HttpServletResponse) response, ErrorCodes.JWT_AUTH_TOKEN_VALIDATION_ERROR);
+            ResponseUtil.doResponse(response, ErrorCodes.JWT_AUTH_TOKEN_VALIDATION_ERROR);
         }
     }
 }

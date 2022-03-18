@@ -2,14 +2,12 @@ package com.example.picturediary.common.util;
 
 import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,8 +15,7 @@ import java.net.URL;
 @UtilityClass
 public class KakaoUtil
 {
-    @Value("${spring.social.kakao-url}")
-    private String kakaoUrl;
+    private String kakaoUrl = "https://kapi.kakao.com/v1/user/access_token_info";
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -45,8 +42,12 @@ public class KakaoUtil
             URL url = new URL(kakaoUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
+            connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + socialToken);
+            connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
+            connection.setRequestMethod("GET");
+
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = null;
+            StringBuilder response = new StringBuilder();
 
             String temp;
             while ((temp = br.readLine()) != null)

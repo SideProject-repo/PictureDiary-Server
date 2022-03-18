@@ -4,11 +4,11 @@ import com.example.picturediary.common.exception.customerror.CustomError;
 import com.example.picturediary.common.exception.response.CustomErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Controller
-public class ExcpetionHandlerController
+@RestControllerAdvice
+public class ExceptionHandlerController
 {
     @ExceptionHandler(CustomError.class)
     public ResponseEntity<CustomErrorResponse> handle(CustomError e)

@@ -1,7 +1,9 @@
 package com.example.picturediary.common.exception.response;
 
 import com.example.picturediary.common.enums.ErrorCodes;
+import lombok.Getter;
 
+@Getter
 public class CustomErrorResponse
 {
     private final int errorCode;
