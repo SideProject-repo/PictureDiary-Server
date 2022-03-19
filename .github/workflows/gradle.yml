@@ -26,11 +26,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Create env file
-        run: |
-          touch .env
-          echo API_ENDPOINT=146.56.130.233 >> .env
-          echo API_KEY=${{ secrets.API_KEY }} >> .env
-          cat .env
+      run: |
+        touch .env
+        echo API_ENDPOINT=146.56.130.233 >> .env
+        echo API_KEY=${{ secrets.API_KEY }} >> .env
+        cat .env
     - name: Build with Gradle
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
