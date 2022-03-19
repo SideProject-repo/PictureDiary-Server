@@ -53,6 +53,16 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
 }
 
+jar {
+    enabled = false
+}
+
+bootJar{
+    archivesBaseName = 'app'
+    archiveFileName = 'app.jar'
+    archiveVersion = "0.0.0"
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

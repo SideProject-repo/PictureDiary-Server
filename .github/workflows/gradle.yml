@@ -29,3 +29,22 @@ jobs:
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
         arguments: build
+    - name: Docker build
+      run: |
+        docker build -t spring-cicd
+        docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+        docker build -t spring-cicd .
+        docker tag spring-cide s2moon98/spring-cicd:${GITHUB_SHA::7}
+        docker push s2moon98/spring-cicd:${GITHUB_SHA::7}
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: 서버명[~~ap-northeast-2.compute.amazonaws.com로 시작하는 서버명을 적음]
+        username: ec2-user
+        key: ${{ secrets.PRIVATE_KEY }}
+        envs: GITHUB_SHA
+        script: |
+          docker pull [계정명]/spring-cicd:${GITHUB_SHA::7}
+          docker tag [계정명]/spring-cicd:${GITHUB_SHA::7} spring-cicd
+          docker stop server
+          docker run -d --rm --name server -p 80:8080 spring-cicd
