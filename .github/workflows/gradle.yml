@@ -39,7 +39,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: 146.56.130.233
-        username: ec2-user
+        username: ubuntu
         key: ${{ secrets.PRIVATE_KEY }}
         envs: GITHUB_SHA
         script: |
