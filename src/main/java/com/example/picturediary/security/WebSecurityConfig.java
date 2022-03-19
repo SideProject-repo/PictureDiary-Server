@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 "/swagger/**",
                 "/favicon.ico",
                 "/dont-pass-filter",
-                "/auth/**/sign-up",
-                "/auth/**/sign-in"
+                "/auth/sign-up",
+                "/auth/sign-in"
         );
     }
 

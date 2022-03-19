@@ -1,49 +1,46 @@
-package com.example.picturediary.common.util;
+package com.example.picturediary.domain.user.service;
 
 import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@UtilityClass
-public class KakaoUtil
+@Service
+public class GoogleTokenService
 {
-    private String kakaoUrl = "https://kapi.kakao.com/v1/user/access_token_info";
+    private static final String googleUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    public static Long getUserIdFromKakaoToken(String socialToken)
+    public Long getUserIdFromSocialToken(String socialToken)
     {
         String response = getResponseFromKakao(socialToken);
         return getUserIdFromResponse(response);
     }
 
-    private static Long getUserIdFromResponse(String response)
+    private Long getUserIdFromResponse(String response)
     {
         try {
             JsonNode jsonResponse = objectMapper.readTree(response);
-            return jsonResponse.get("id").asLong();
+            return jsonResponse.get("userid").asLong();
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
         }
     }
 
-    private static String getResponseFromKakao(String socialToken)
+    private String getResponseFromKakao(String socialToken)
     {
         try {
-            URL url = new URL(kakaoUrl);
+            URL url = new URL(googleUrl + socialToken);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + socialToken);
-            connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
             connection.setRequestMethod("GET");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -58,7 +55,7 @@ public class KakaoUtil
             return response.toString();
         }
         catch(Exception e) {
-            throw new CustomError(ErrorCodes.KAKAO_SERVER_ERROR);
+            throw new CustomError(ErrorCodes.GOOGLE_SERVER_ERROR);
         }
     }
 }

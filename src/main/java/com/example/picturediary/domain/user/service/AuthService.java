@@ -1,8 +1,8 @@
 package com.example.picturediary.domain.user.service;
 
 import com.example.picturediary.common.enums.ErrorCodes;
+import com.example.picturediary.common.enums.SocialType;
 import com.example.picturediary.common.exception.customerror.CustomError;
-import com.example.picturediary.common.util.KakaoUtil;
 import com.example.picturediary.domain.user.entity.DiaryUser;
 import com.example.picturediary.domain.user.repository.UserRepository;
 import com.example.picturediary.domain.user.request.SignInRequest;
@@ -10,7 +10,7 @@ import com.example.picturediary.domain.user.request.SignUpRequest;
 import com.example.picturediary.domain.user.response.SignInResponse;
 import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.security.jwt.JwtUtil;
-import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,17 +18,23 @@ import org.springframework.stereotype.Service;
 public class AuthService
 {
     private final UserRepository userRepository;
+    private final KakaoTokenService kakaoTokenService;
+    private final GoogleTokenService googleTokenService;
 
     @Autowired
-    public AuthService(UserRepository userRepository)
+    public AuthService(
+        UserRepository userRepository,
+        KakaoTokenService kakaoTokenService,
+        GoogleTokenService googleTokenService)
     {
         this.userRepository = userRepository;
+        this.kakaoTokenService = kakaoTokenService;
+        this.googleTokenService = googleTokenService;
     }
 
-    @ApiOperation("카카오 회원가입")
     public SignUpResponse signUp(SignUpRequest signUpRequest)
     {
-        Long socialId = KakaoUtil.getUserIdFromKakaoToken(signUpRequest.getSocialToken());
+        Long socialId = getUserIdFromSocialToken(signUpRequest.getSocialType(), signUpRequest.getSocialToken());
 
         if (!userRepository.existsBySocialId(socialId))
         {
@@ -50,10 +56,9 @@ public class AuthService
         }
     }
 
-    @ApiOperation("카카오 로그인")
     public SignInResponse signIn(SignInRequest signInRequest)
     {
-        Long socialId = KakaoUtil.getUserIdFromKakaoToken(signInRequest.getSocialToken());
+        Long socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialType());
 
         if (userRepository.existsBySocialId(socialId))
         {
@@ -67,6 +72,18 @@ public class AuthService
         {
             throw new CustomError(ErrorCodes.ALREADY_SIGN_UP_USER);
         }
+    }
+
+    private Long getUserIdFromSocialToken(String socialType, String socialToken)
+    {
+        if (StringUtils.equals(socialType, SocialType.KAKAO.getSocialTypeName()))
+            return kakaoTokenService.getUserIdFromSocialToken(socialToken);
+        else if (StringUtils.equals(socialType, SocialType.GOOGLE.getSocialTypeName()))
+            return googleTokenService.getUserIdFromSocialToken(socialToken);
+        else if (StringUtils.equals(socialType, SocialType.APPLE.getSocialTypeName()))
+            return null;
+        else
+            throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYOE_ERROR);
     }
 
     public void logout()
