@@ -33,7 +33,7 @@ jobs:
       run: |
         docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
         docker build -t spring-cicd .
-        docker tag spring-cide s2moon98/spring-cicd:${GITHUB_SHA::7}
+        docker tag spring-cicd s2moon98/spring-cicd:${GITHUB_SHA::7}
         docker push s2moon98/spring-cicd:${GITHUB_SHA::7}
     - name: Deploy
       uses: appleboy/ssh-action@master
