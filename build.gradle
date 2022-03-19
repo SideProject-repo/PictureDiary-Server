@@ -57,12 +57,6 @@ jar {
     enabled = false
 }
 
-bootJar{
-    archivesBaseName = 'app'
-    archiveFileName = 'app.jar'
-    archiveVersion = "0.0.0"
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
