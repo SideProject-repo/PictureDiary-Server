@@ -31,7 +31,6 @@ jobs:
         arguments: build
     - name: Docker build
       run: |
-        docker build -t spring-cicd
         docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
         docker build -t spring-cicd .
         docker tag spring-cide s2moon98/spring-cicd:${GITHUB_SHA::7}
@@ -39,12 +38,12 @@ jobs:
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
-        host: 서버명[~~ap-northeast-2.compute.amazonaws.com로 시작하는 서버명을 적음]
+        host: 146.56.130.233
         username: ec2-user
         key: ${{ secrets.PRIVATE_KEY }}
         envs: GITHUB_SHA
         script: |
-          docker pull [계정명]/spring-cicd:${GITHUB_SHA::7}
-          docker tag [계정명]/spring-cicd:${GITHUB_SHA::7} spring-cicd
+          docker pull s2moon98/spring-cicd:${GITHUB_SHA::7}
+          docker tag s2moon98/spring-cicd:${GITHUB_SHA::7} spring-cicd
           docker stop server
           docker run -d --rm --name server -p 80:8080 spring-cicd
