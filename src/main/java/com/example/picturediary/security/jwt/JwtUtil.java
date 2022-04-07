@@ -35,6 +35,17 @@ public class JwtUtil
             .compact();
     }
 
+    public static String createInfiniteToken(String userId)
+    {
+        Date date = new Date();
+
+        return Jwts.builder()
+            .setIssuedAt(date)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .claim(CLAIM_KEY_USER, userId)
+            .compact();
+    }
+
     public static String getTokenFromHeader(HttpServletRequest httpServletRequest)
     {
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
