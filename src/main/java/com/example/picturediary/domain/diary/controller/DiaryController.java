@@ -46,7 +46,7 @@ public class DiaryController
 
     @ApiOperation("일기 이미지 업로드")
     @PostMapping(value = "/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CommonResponse> uploadDiaryImage(@RequestPart("image") MultipartFile image)
+    public ResponseEntity<CommonResponse> uploadDiaryImage( @RequestPart("image") MultipartFile image)
     {
         UploadDiaryImageResponse response = diaryService.uploadDiaryImage(image);
         return new ResponseEntity(response, HttpStatus.OK);
