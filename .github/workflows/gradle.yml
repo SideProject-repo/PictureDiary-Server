@@ -27,11 +27,8 @@ jobs:
         distribution: 'temurin'
     - name: Create Spring Properties
       run: |
-        touch ./application.yml
-        echo "$DEV_SPRING_PROPERTIES" > application.yml.b64
-        base64 -d -i application.yml.b64 > ./application.yml
-      env:
-        DEV_SPRING_PROPERTIES: ${{ secrets.DEV_SPRING_PROPERTIES }}
+        touch .env
+        echo VARIABLE=${{ secrets.DEV_SPRING_PROPERTIES }} >> .env
     - name: Build with Gradle
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
