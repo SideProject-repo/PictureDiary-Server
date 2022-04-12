@@ -30,6 +30,7 @@ jobs:
         touch ./application.yml
         echo "${{ secrets.DEV_SPRING_PROPERTIES }}" >> ./application.yml
         tail -n 3 ./application.yml
+        echo "$(ls)"
     - name: Build with Gradle
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
