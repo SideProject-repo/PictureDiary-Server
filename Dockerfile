@@ -6,9 +6,6 @@ COPY ${JAR_FILE} app.jar
 ARG PROPERTIES_FILE=application.yml
 COPY ${PROPERTIES_FILE} application.yml
 
-CMD ["ls", "-al"]
-
-#ARG WALLET_FILE=src/main/resources/Wallet_sideproject
-#COPY ${WALLET_FILE} src/main/resources/Wallet_sideproject
+ADD src/main/resources/Wallet_sideproject Wallet_sideproject
 
 ENTRYPOINT ["java", "-jar", "/app.jar", "-Dspring.config.location=/application.yml"]
