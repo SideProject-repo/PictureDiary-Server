@@ -11,8 +11,8 @@ import lombok.Setter;
 public class SignInRequest
 {
     @ApiModelProperty(value = "소셜 로그인 토큰")
-    String socialToken;
+    private String socialToken;
 
     @ApiModelProperty(value = "소셜 로그인 타입", example = "KAKAO|GOOGLE|APPLE")
-    String socialType;
+    private String socialType;
 }
