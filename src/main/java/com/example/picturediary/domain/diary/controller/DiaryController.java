@@ -1,11 +1,10 @@
 package com.example.picturediary.domain.diary.controller;
 
-import com.example.picturediary.common.annotation.CurrentUser;
 import com.example.picturediary.common.response.CommonResponse;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
+import com.example.picturediary.domain.diary.response.GetDiaryResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
 import com.example.picturediary.domain.diary.service.DiaryService;
-import com.example.picturediary.domain.user.entity.DiaryUser;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/diary")
@@ -50,6 +53,17 @@ public class DiaryController
     {
         UploadDiaryImageResponse response = diaryService.uploadDiaryImage(image);
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @ApiOperation("내가 쓴 일기 list 조회")
+    @GetMapping(value = "/me")
+    public ResponseEntity<List<GetDiaryResponse>> getMyDiaryList(
+        @ApiParam(value = "마지막으로 가져온 이전 일기 id") @RequestParam Long lastDiaryId,
+        @ApiParam(value = "사이즈") @RequestParam Long size,
+        @AuthenticationPrincipal @ApiIgnore UserDetails user)
+    {
+        List<GetDiaryResponse> myDiaryList = diaryService.getMyDiaryList(lastDiaryId, size, user);
+        return new ResponseEntity(myDiaryList, HttpStatus.OK);
     }
 
 }
