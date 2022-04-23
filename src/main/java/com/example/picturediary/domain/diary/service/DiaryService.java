@@ -55,4 +55,15 @@ public class DiaryService
 
         return myDiaryListResponse;
     }
+
+    public List<GetDiaryResponse> getDiaryList(Long lastDiaryId, Long size)
+    {
+        List<Diary> diaryList = diaryRepository.getDiaryList(lastDiaryId, size);
+
+        List<GetDiaryResponse> diaryListResponse = diaryList.stream()
+            .map(GetDiaryResponse::of)
+            .collect(Collectors.toList());
+
+        return diaryListResponse;
+    }
 }

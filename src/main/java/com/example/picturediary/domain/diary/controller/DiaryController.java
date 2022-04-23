@@ -56,7 +56,7 @@ public class DiaryController
     }
 
     @ApiOperation("내가 쓴 일기 list 조회")
-    @GetMapping(value = "/me")
+    @GetMapping(value = "/list/me")
     public ResponseEntity<List<GetDiaryResponse>> getMyDiaryList(
         @ApiParam(value = "마지막으로 가져온 이전 일기 id") @RequestParam Long lastDiaryId,
         @ApiParam(value = "사이즈") @RequestParam Long size,
@@ -64,6 +64,16 @@ public class DiaryController
     {
         List<GetDiaryResponse> myDiaryList = diaryService.getMyDiaryList(lastDiaryId, size, user);
         return new ResponseEntity(myDiaryList, HttpStatus.OK);
+    }
+
+    @ApiOperation("모든 일기 list 조회")
+    @GetMapping(value = "/list")
+    public ResponseEntity<List<GetDiaryResponse>> getDiaryList(
+        @ApiParam(value = "마지막으로 가져온 이전 일기 id") @RequestParam Long lastDiaryId,
+        @ApiParam(value = "사이즈") @RequestParam Long size)
+    {
+        List<GetDiaryResponse> diaryList = diaryService.getDiaryList(lastDiaryId, size);
+        return new ResponseEntity(diaryList, HttpStatus.OK);
     }
 
 }
