@@ -4,11 +4,16 @@ import com.example.picturediary.common.util.S3Util;
 import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.diary.repository.DiaryRepository;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
+import com.example.picturediary.domain.diary.response.GetDiaryResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
 import com.example.picturediary.domain.user.entity.DiaryUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DiaryService
@@ -38,5 +43,16 @@ public class DiaryService
         return UploadDiaryImageResponse.builder()
             .imageUrl(imageUrl)
             .build();
+    }
+
+    public List<GetDiaryResponse> getMyDiaryList(Long lastDiaryId, Long size, UserDetails user)
+    {
+        List<Diary> myDiaryList = diaryRepository.getDiaryByUserId(lastDiaryId, size, Long.parseLong(user.getUsername()));
+
+        List<GetDiaryResponse> myDiaryListResponse = myDiaryList.stream()
+            .map(GetDiaryResponse::of)
+            .collect(Collectors.toList());
+
+        return myDiaryListResponse;
     }
 }

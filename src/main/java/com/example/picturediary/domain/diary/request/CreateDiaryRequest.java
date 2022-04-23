@@ -2,9 +2,8 @@ package com.example.picturediary.domain.diary.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -20,4 +19,15 @@ public class CreateDiaryRequest
 
     @ApiModelProperty(value = "그림 일기 이미지 url")
     private String imageUrl;
+
+    @Builder
+    private CreateDiaryRequest(
+        String weather
+        , String content
+        , String imageUrl)
+    {
+        this.weather = weather;
+        this.content = content;
+        this.imageUrl = imageUrl;
+    }
 }
