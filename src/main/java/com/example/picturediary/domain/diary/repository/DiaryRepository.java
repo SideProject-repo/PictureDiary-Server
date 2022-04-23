@@ -10,10 +10,18 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>
 {
     @Query(value =
         "SELECT * " +
-        "FROM DIARY d " +
-        "WHERE USER_ID = (:userId) " +
-        "AND DIARY_ID > (:lastDiaryId) " +
-        "ORDER BY CREATED_DATE DESC " +
-        "FETCH FIRST (:size) ROWS ONLY", nativeQuery = true)
+            "FROM DIARY d " +
+            "WHERE USER_ID = (:userId) " +
+            "AND DIARY_ID > (:lastDiaryId) " +
+            "ORDER BY CREATED_DATE DESC " +
+            "FETCH FIRST (:size) ROWS ONLY", nativeQuery = true)
     List<Diary> getDiaryByUserId(Long lastDiaryId, Long size, Long userId);
+
+    @Query(value =
+        "SELECT * " +
+            "FROM DIARY d " +
+            "WHERE DIARY_ID > (:lastDiaryId) " +
+            "ORDER BY CREATED_DATE DESC " +
+            "FETCH FIRST (:size) ROWS ONLY", nativeQuery = true)
+    List<Diary> getDiaryList(Long lastDiaryId, Long size);
 }
