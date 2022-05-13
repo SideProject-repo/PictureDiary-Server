@@ -4,9 +4,10 @@ import com.example.picturediary.common.util.S3Util;
 import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.diary.repository.DiaryRepository;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
-import com.example.picturediary.domain.diary.response.GetDiaryResponse;
+import com.example.picturediary.domain.diary.response.GetDiaryListResponse;
+import com.example.picturediary.domain.diary.response.GetDiarySingleResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
-import com.example.picturediary.domain.user.entity.DiaryUser;
+import com.example.picturediary.domain.stamp.response.StampInDiaryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -45,25 +46,42 @@ public class DiaryService
             .build();
     }
 
-    public List<GetDiaryResponse> getMyDiaryList(Long lastDiaryId, Long size, UserDetails user)
+    public List<GetDiaryListResponse> getMyDiaryList(Long lastDiaryId, Long size, UserDetails user)
     {
         List<Diary> myDiaryList = diaryRepository.getDiaryByUserId(lastDiaryId, size, Long.parseLong(user.getUsername()));
 
-        List<GetDiaryResponse> myDiaryListResponse = myDiaryList.stream()
-            .map(GetDiaryResponse::of)
+        List<GetDiaryListResponse> myDiaryListResponse = myDiaryList.stream()
+            .map(GetDiaryListResponse::of)
             .collect(Collectors.toList());
 
         return myDiaryListResponse;
     }
 
-    public List<GetDiaryResponse> getDiaryList(Long lastDiaryId, Long size)
+    public List<GetDiaryListResponse> getDiaryList(Long lastDiaryId, Long size)
     {
         List<Diary> diaryList = diaryRepository.getDiaryList(lastDiaryId, size);
 
-        List<GetDiaryResponse> diaryListResponse = diaryList.stream()
-            .map(GetDiaryResponse::of)
+        List<GetDiaryListResponse> diaryListResponse = diaryList.stream()
+            .map(GetDiaryListResponse::of)
             .collect(Collectors.toList());
 
         return diaryListResponse;
+    }
+
+    public GetDiarySingleResponse getDiary(Long diaryId)
+    {
+        Diary diary = diaryRepository.getDiaryByDiaryId(diaryId);
+
+        return GetDiarySingleResponse.builder()
+            .diaryId(diary.getDiaryId())
+            .imageUrl(diary.getImageUrl())
+            .weather(diary.getWeather())
+            .createdDate(diary.getCreatedDate())
+            .stampList(
+                diary.getStampList().stream()
+                    .map(StampInDiaryResponse::of)
+                    .collect(Collectors.toList())
+            )
+            .build();
     }
 }

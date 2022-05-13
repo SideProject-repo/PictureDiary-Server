@@ -1,5 +1,6 @@
 package com.example.picturediary.domain.diary.request;
 
+import com.example.picturediary.common.enums.Weather;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.Setter;
 public class CreateDiaryRequest
 {
     @ApiModelProperty(value = "날씨", example = "Sun|Cloud|Rain|Snow")
-    private String weather;
+    private Weather weather;
 
     @ApiModelProperty(value = "그림 일기 내용")
     private String content;
@@ -22,7 +23,7 @@ public class CreateDiaryRequest
 
     @Builder
     private CreateDiaryRequest(
-        String weather
+        Weather weather
         , String content
         , String imageUrl)
     {

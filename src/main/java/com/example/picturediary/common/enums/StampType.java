@@ -3,7 +3,7 @@ package com.example.picturediary.common.enums;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum Stamp
+public enum StampType
 {
     GRAL("G-RAL을 해요"),
     DOTHIS("이걸 하네"),

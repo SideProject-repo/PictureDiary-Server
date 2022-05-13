@@ -24,4 +24,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>
             "ORDER BY CREATED_DATE DESC " +
             "FETCH FIRST (:size) ROWS ONLY", nativeQuery = true)
     List<Diary> getDiaryList(Long lastDiaryId, Long size);
+
+    Diary getDiaryByDiaryId(Long diaryId);
 }

@@ -1,8 +1,8 @@
 package com.example.picturediary.domain.stamp.repository;
 
-import com.example.picturediary.domain.stamp.entity.StampDiary;
+import com.example.picturediary.domain.stamp.entity.Stamp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StampDiaryRepository extends JpaRepository<StampDiary, Long>
+public interface StampDiaryRepository extends JpaRepository<Stamp, Long>
 {
 }

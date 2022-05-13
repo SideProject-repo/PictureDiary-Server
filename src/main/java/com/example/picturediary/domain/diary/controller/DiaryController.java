@@ -2,7 +2,8 @@ package com.example.picturediary.domain.diary.controller;
 
 import com.example.picturediary.common.response.CommonResponse;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
-import com.example.picturediary.domain.diary.response.GetDiaryResponse;
+import com.example.picturediary.domain.diary.response.GetDiaryListResponse;
+import com.example.picturediary.domain.diary.response.GetDiarySingleResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
 import com.example.picturediary.domain.diary.service.DiaryService;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,23 +59,32 @@ public class DiaryController
 
     @ApiOperation("내가 쓴 일기 list 조회")
     @GetMapping(value = "/list/me")
-    public ResponseEntity<List<GetDiaryResponse>> getMyDiaryList(
+    public ResponseEntity<List<GetDiaryListResponse>> getMyDiaryList(
         @ApiParam(value = "마지막으로 가져온 이전 일기 id") @RequestParam Long lastDiaryId,
         @ApiParam(value = "사이즈") @RequestParam Long size,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
-        List<GetDiaryResponse> myDiaryList = diaryService.getMyDiaryList(lastDiaryId, size, user);
+        List<GetDiaryListResponse> myDiaryList = diaryService.getMyDiaryList(lastDiaryId, size, user);
         return new ResponseEntity(myDiaryList, HttpStatus.OK);
     }
 
     @ApiOperation("모든 일기 list 조회")
     @GetMapping(value = "/list")
-    public ResponseEntity<List<GetDiaryResponse>> getDiaryList(
+    public ResponseEntity<List<GetDiaryListResponse>> getDiaryList(
         @ApiParam(value = "마지막으로 가져온 이전 일기 id") @RequestParam Long lastDiaryId,
         @ApiParam(value = "사이즈") @RequestParam Long size)
     {
-        List<GetDiaryResponse> diaryList = diaryService.getDiaryList(lastDiaryId, size);
+        List<GetDiaryListResponse> diaryList = diaryService.getDiaryList(lastDiaryId, size);
         return new ResponseEntity(diaryList, HttpStatus.OK);
+    }
+
+    @ApiOperation("일기 단건 조회")
+    @GetMapping(value = "/{diaryId}")
+    public ResponseEntity<GetDiarySingleResponse> getDiary(
+        @ApiParam(value = "일기 id") @PathVariable("diaryId") Long diaryId)
+    {
+        GetDiarySingleResponse diary = diaryService.getDiary(diaryId);
+        return new ResponseEntity(diary, HttpStatus.OK);
     }
 
 }
