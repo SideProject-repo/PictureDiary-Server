@@ -11,7 +11,7 @@ import lombok.Setter;
 @ApiModel(value = "일기 생성 요청")
 public class CreateDiaryRequest
 {
-    @ApiModelProperty(value = "날씨", example = "Sun|Cloud|Rain|Snow")
+    @ApiModelProperty(value = "날씨", example = "SUN|CLOUD|RAIN|SNOW")
     private String weather;
 
     @ApiModelProperty(value = "그림 일기 내용")

@@ -1,22 +1,28 @@
 package com.example.picturediary.domain.diary.entity;
 
 import com.example.picturediary.common.entity.BaseTimeEntity;
+import com.example.picturediary.common.enums.Weather;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
-import com.example.picturediary.domain.user.entity.DiaryUser;
+import com.example.picturediary.domain.stamp.entity.Stamp;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "diary")
 public class Diary extends BaseTimeEntity
 {
@@ -28,17 +34,20 @@ public class Diary extends BaseTimeEntity
 
     private String imageUrl;
 
-    private String weather;
+    private Weather weather;
 
     @Lob
     private String content;
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stamp> stampList;
 
     @Builder
     private Diary(
         Long diaryId,
         Long userId,
         String imageUrl,
-        String weather,
+        Weather weather,
         String content)
     {
         this.diaryId = diaryId;
@@ -55,7 +64,7 @@ public class Diary extends BaseTimeEntity
         return Diary.builder()
             .userId(Long.parseLong(userId))
             .imageUrl(createDiaryRequest.getImageUrl())
-            .weather(createDiaryRequest.getWeather())
+            .weather(Weather.valueOf(createDiaryRequest.getWeather()))
             .content(createDiaryRequest.getContent())
             .build();
     }
