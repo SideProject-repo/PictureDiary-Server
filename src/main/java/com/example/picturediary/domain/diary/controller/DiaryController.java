@@ -45,7 +45,7 @@ public class DiaryController
         @RequestBody CreateDiaryRequest createDiaryRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
-        diaryService.createDiary(createDiaryRequest, user.getUsername());
+        diaryService.createDiary(createDiaryRequest, user);
         return new ResponseEntity<>(new CommonResponse("일기 생성 성공"), HttpStatus.OK);
     }
 
