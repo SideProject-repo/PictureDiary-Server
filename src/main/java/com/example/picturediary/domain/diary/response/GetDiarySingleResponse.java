@@ -22,7 +22,7 @@ public class GetDiarySingleResponse
     @ApiModelProperty(value = "일기 이미지 url")
     private String imageUrl;
 
-    @ApiModelProperty(value = "날씨", example = "Sun|Cloud|Rain|Snow")
+    @ApiModelProperty(value = "날씨", example = "SUN|CLOUD|RAIN|SNOW")
     private Weather weather;
 
     @ApiModelProperty(value = "일기 생성 날짜")
