@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -59,10 +60,10 @@ public class Diary extends BaseTimeEntity
 
     public static Diary of(
         CreateDiaryRequest createDiaryRequest,
-        String userId)
+        UserDetails user)
     {
         return Diary.builder()
-            .userId(Long.parseLong(userId))
+            .userId(Long.parseLong(user.getUsername()))
             .imageUrl(createDiaryRequest.getImageUrl())
             .weather(Weather.valueOf(createDiaryRequest.getWeather()))
             .content(createDiaryRequest.getContent())
