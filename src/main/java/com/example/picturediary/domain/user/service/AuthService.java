@@ -20,16 +20,19 @@ public class AuthService
     private final UserRepository userRepository;
     private final KakaoTokenService kakaoTokenService;
     private final GoogleTokenService googleTokenService;
+    private final AppleTokenService appleTokenService;
 
     @Autowired
     public AuthService(
         UserRepository userRepository,
         KakaoTokenService kakaoTokenService,
-        GoogleTokenService googleTokenService)
+        GoogleTokenService googleTokenService,
+        AppleTokenService appleTokenService)
     {
         this.userRepository = userRepository;
         this.kakaoTokenService = kakaoTokenService;
         this.googleTokenService = googleTokenService;
+        this.appleTokenService = appleTokenService;
     }
 
     public SignUpResponse signUp(SignUpRequest signUpRequest)
@@ -81,7 +84,7 @@ public class AuthService
         else if (StringUtils.equals(socialType, SocialType.GOOGLE.getSocialTypeName()))
             return googleTokenService.getUserIdFromSocialToken(socialToken);
         else if (StringUtils.equals(socialType, SocialType.APPLE.getSocialTypeName()))
-            return null;
+            return appleTokenService.getUserIdFromSocialToken(socialToken);
         else
             throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYOE_ERROR);
     }

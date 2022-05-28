@@ -16,7 +16,8 @@ public enum ErrorCodes
     ALREADY_SIGN_UP_USER("이미 회원가입한 회원입니다", 1000006),
     NOT_EXIST_SOCIAL_TYOE_ERROR("존재하지 않는 소셜 로그인 타입입니다.", 1000007),
     GOOGLE_SERVER_ERROR("구글 서버 접속 중 에러가 발생했습니다.", 1000008),
-    FILE_UPLOAD_ERROR("S3에 업로드 중 에러가 발생했습니다.", 1000009)
+    FILE_UPLOAD_ERROR("S3에 업로드 중 에러가 발생했습니다.", 1000009),
+    APPLE_SERVER_ERROR("애플 서버에 접속 중 에러가 발생했습니다.", 1000010)
     ;
 
     private String errorMessage;
