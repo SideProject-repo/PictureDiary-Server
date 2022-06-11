@@ -4,6 +4,7 @@ import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +12,47 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 
 @Service
-public class KakaoTokenService
+public class AppleTokenService
 {
-    private static final String kakaoUrl = "https://kapi.kakao.com/v2/user/me";
+    private static final String appleUrl = "https://appleid.apple.com/auth/keys";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public String getUserIdFromSocialToken(String socialToken)
     {
-        String response = getResponseFromKakao(socialToken);
-        return getUserIdFromResponse(response);
+        authorizeAppleToken(socialToken);
+        return getUserIdFromToken(socialToken);
     }
 
-    private String getUserIdFromResponse(String response)
+    private String getUserIdFromToken(String token)
     {
         try {
-            JsonNode jsonResponse = objectMapper.readTree(response);
-            return jsonResponse.get("id").toString();
+            String[] chunks = token.split("\\.");
+
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+
+            String payload = new String(decoder.decode(chunks[1]));
+
+            JsonNode jsonResponse = objectMapper.readTree(payload);
+            String userId = jsonResponse.get("email").toString();
+
+            if (StringUtils.isEmpty(userId))
+                throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
+
+            return userId;
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
         }
     }
 
-    private String getResponseFromKakao(String socialToken)
+    private String authorizeAppleToken(String socialToken)
     {
         try {
-            URL url = new URL(kakaoUrl);
+            URL url = new URL(appleUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + socialToken);
@@ -58,7 +71,7 @@ public class KakaoTokenService
             return response.toString();
         }
         catch(Exception e) {
-            throw new CustomError(ErrorCodes.KAKAO_SERVER_ERROR);
+            throw new CustomError(ErrorCodes.APPLE_SERVER_ERROR);
         }
     }
 }

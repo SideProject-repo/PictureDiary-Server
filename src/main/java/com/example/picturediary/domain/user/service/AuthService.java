@@ -20,21 +20,24 @@ public class AuthService
     private final UserRepository userRepository;
     private final KakaoTokenService kakaoTokenService;
     private final GoogleTokenService googleTokenService;
+    private final AppleTokenService appleTokenService;
 
     @Autowired
     public AuthService(
         UserRepository userRepository,
         KakaoTokenService kakaoTokenService,
-        GoogleTokenService googleTokenService)
+        GoogleTokenService googleTokenService,
+        AppleTokenService appleTokenService)
     {
         this.userRepository = userRepository;
         this.kakaoTokenService = kakaoTokenService;
         this.googleTokenService = googleTokenService;
+        this.appleTokenService = appleTokenService;
     }
 
     public SignUpResponse signUp(SignUpRequest signUpRequest)
     {
-        Long socialId = getUserIdFromSocialToken(signUpRequest.getSocialType(), signUpRequest.getSocialToken());
+        String socialId = getUserIdFromSocialToken(signUpRequest.getSocialType(), signUpRequest.getSocialToken());
 
         if (!userRepository.existsBySocialId(socialId))
         {
@@ -44,7 +47,7 @@ public class AuthService
 
             userRepository.save(diaryUser);
 
-            String accessToken = JwtUtil.createAccessToken(socialId.toString());
+            String accessToken = JwtUtil.createAccessToken(socialId);
 
             return SignUpResponse.builder()
                 .accessToken(accessToken)
@@ -58,11 +61,11 @@ public class AuthService
 
     public SignInResponse signIn(SignInRequest signInRequest)
     {
-        Long socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialType());
+        String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialToken());
 
         if (userRepository.existsBySocialId(socialId))
         {
-            String accessToken = JwtUtil.createAccessToken(socialId.toString());
+            String accessToken = JwtUtil.createAccessToken(socialId);
 
             return SignInResponse.builder()
                 .accessToken(accessToken)
@@ -70,20 +73,20 @@ public class AuthService
         }
         else
         {
-            throw new CustomError(ErrorCodes.ALREADY_SIGN_UP_USER);
+            throw new CustomError(ErrorCodes.NOT_SIGN_UP_USER);
         }
     }
 
-    private Long getUserIdFromSocialToken(String socialType, String socialToken)
+    private String getUserIdFromSocialToken(String socialType, String socialToken)
     {
         if (StringUtils.equals(socialType, SocialType.KAKAO.getSocialTypeName()))
             return kakaoTokenService.getUserIdFromSocialToken(socialToken);
         else if (StringUtils.equals(socialType, SocialType.GOOGLE.getSocialTypeName()))
             return googleTokenService.getUserIdFromSocialToken(socialToken);
         else if (StringUtils.equals(socialType, SocialType.APPLE.getSocialTypeName()))
-            return null;
+            return appleTokenService.getUserIdFromSocialToken(socialToken);
         else
-            throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYOE_ERROR);
+            throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYPE_ERROR);
     }
 
     public void logout()

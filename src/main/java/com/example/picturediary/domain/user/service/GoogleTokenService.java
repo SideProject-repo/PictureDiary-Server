@@ -19,17 +19,17 @@ public class GoogleTokenService
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Long getUserIdFromSocialToken(String socialToken)
+    public String getUserIdFromSocialToken(String socialToken)
     {
         String response = getResponseFromKakao(socialToken);
         return getUserIdFromResponse(response);
     }
 
-    private Long getUserIdFromResponse(String response)
+    private String getUserIdFromResponse(String response)
     {
         try {
             JsonNode jsonResponse = objectMapper.readTree(response);
-            return jsonResponse.get("userid").asLong();
+            return jsonResponse.get("userid").toString();
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
