@@ -21,10 +21,10 @@ public class DiaryUser extends BaseTimeEntity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-    private Long socialId;
+    private String socialId;
 
     @Builder
-    private DiaryUser(Long userId, Long socialId)
+    private DiaryUser(Long userId, String socialId)
     {
         this.userId = userId;
         this.socialId = socialId;

@@ -19,17 +19,18 @@ public class AppleTokenService
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Long getUserIdFromSocialToken(String socialToken)
+    public String getUserIdFromSocialToken(String socialToken)
     {
         String response = getResponseFromApple(socialToken);
         return getUserIdFromResponse(response);
     }
 
-    private Long getUserIdFromResponse(String response)
+    private String getUserIdFromResponse(String response)
     {
         try {
             JsonNode jsonResponse = objectMapper.readTree(response);
-            return jsonResponse.get("email").asLong();
+            System.out.println(jsonResponse.toPrettyString());
+            return jsonResponse.get("email").toString();
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
@@ -58,7 +59,7 @@ public class AppleTokenService
             return response.toString();
         }
         catch(Exception e) {
-            throw new CustomError(ErrorCodes.KAKAO_SERVER_ERROR);
+            throw new CustomError(ErrorCodes.APPLE_SERVER_ERROR);
         }
     }
 }

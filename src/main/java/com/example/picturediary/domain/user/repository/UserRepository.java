@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<DiaryUser, Long>
 {
-    boolean existsBySocialId(Long socialId);
+    boolean existsBySocialId(String socialId);
 
 }

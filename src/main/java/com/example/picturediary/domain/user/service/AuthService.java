@@ -37,7 +37,7 @@ public class AuthService
 
     public SignUpResponse signUp(SignUpRequest signUpRequest)
     {
-        Long socialId = getUserIdFromSocialToken(signUpRequest.getSocialType(), signUpRequest.getSocialToken());
+        String socialId = getUserIdFromSocialToken(signUpRequest.getSocialType(), signUpRequest.getSocialToken());
 
         if (!userRepository.existsBySocialId(socialId))
         {
@@ -47,7 +47,7 @@ public class AuthService
 
             userRepository.save(diaryUser);
 
-            String accessToken = JwtUtil.createAccessToken(socialId.toString());
+            String accessToken = JwtUtil.createAccessToken(socialId);
 
             return SignUpResponse.builder()
                 .accessToken(accessToken)
@@ -61,11 +61,11 @@ public class AuthService
 
     public SignInResponse signIn(SignInRequest signInRequest)
     {
-        Long socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialType());
+        String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialType());
 
         if (userRepository.existsBySocialId(socialId))
         {
-            String accessToken = JwtUtil.createAccessToken(socialId.toString());
+            String accessToken = JwtUtil.createAccessToken(socialId);
 
             return SignInResponse.builder()
                 .accessToken(accessToken)
@@ -77,7 +77,7 @@ public class AuthService
         }
     }
 
-    private Long getUserIdFromSocialToken(String socialType, String socialToken)
+    private String getUserIdFromSocialToken(String socialType, String socialToken)
     {
         if (StringUtils.equals(socialType, SocialType.KAKAO.getSocialTypeName()))
             return kakaoTokenService.getUserIdFromSocialToken(socialToken);
