@@ -61,7 +61,7 @@ public class AuthService
 
     public SignInResponse signIn(SignInRequest signInRequest)
     {
-        String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialType());
+        String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialToken());
 
         if (userRepository.existsBySocialId(socialId))
         {
@@ -73,7 +73,7 @@ public class AuthService
         }
         else
         {
-            throw new CustomError(ErrorCodes.ALREADY_SIGN_UP_USER);
+            throw new CustomError(ErrorCodes.NOT_SIGN_UP_USER);
         }
     }
 
@@ -86,7 +86,7 @@ public class AuthService
         else if (StringUtils.equals(socialType, SocialType.APPLE.getSocialTypeName()))
             return appleTokenService.getUserIdFromSocialToken(socialToken);
         else
-            throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYOE_ERROR);
+            throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYPE_ERROR);
     }
 
     public void logout()

@@ -4,6 +4,7 @@ import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 
 @Service
 public class AppleTokenService
@@ -21,23 +23,33 @@ public class AppleTokenService
 
     public String getUserIdFromSocialToken(String socialToken)
     {
-        String response = getResponseFromApple(socialToken);
-        return getUserIdFromResponse(response);
+        authorizeAppleToken(socialToken);
+        return getUserIdFromToken(socialToken);
     }
 
-    private String getUserIdFromResponse(String response)
+    private String getUserIdFromToken(String token)
     {
         try {
-            JsonNode jsonResponse = objectMapper.readTree(response);
-            System.out.println(jsonResponse.toPrettyString());
-            return jsonResponse.get("email").toString();
+            String[] chunks = token.split("\\.");
+
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+
+            String payload = new String(decoder.decode(chunks[1]));
+
+            JsonNode jsonResponse = objectMapper.readTree(payload);
+            String userId = jsonResponse.get("email").toString();
+
+            if (StringUtils.isEmpty(userId))
+                throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
+
+            return userId;
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
         }
     }
 
-    private String getResponseFromApple(String socialToken)
+    private String authorizeAppleToken(String socialToken)
     {
         try {
             URL url = new URL(appleUrl);

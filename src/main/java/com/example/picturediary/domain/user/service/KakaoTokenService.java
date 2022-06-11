@@ -15,7 +15,7 @@ import java.net.URL;
 @Service
 public class KakaoTokenService
 {
-    private static final String kakaoUrl = "https://kapi.kakao.com/v1/user/access_token_info";
+    private static final String kakaoUrl = "https://kapi.kakao.com/v2/user/me";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
