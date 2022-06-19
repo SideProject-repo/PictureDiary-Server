@@ -82,6 +82,7 @@ public class DiaryService
                     .map(StampInDiaryResponse::of)
                     .collect(Collectors.toList())
             )
+            .content(diary.getContent())
             .build();
     }
 }

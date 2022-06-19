@@ -42,7 +42,7 @@ public class DiaryController
     @ApiOperation("일기 생성")
     @PostMapping
     public ResponseEntity<CommonResponse> createDiary(
-        @RequestBody CreateDiaryRequest createDiaryRequest,
+        CreateDiaryRequest createDiaryRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
         diaryService.createDiary(createDiaryRequest, user);

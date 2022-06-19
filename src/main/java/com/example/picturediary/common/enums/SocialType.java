@@ -12,4 +12,6 @@ public enum SocialType
     APPLE("APPLE");
 
     private final String socialTypeName;
+
+    public static final String ALLOWABLE_VALUES = "KAKAO,GOOGLE,APPLE";
 }
