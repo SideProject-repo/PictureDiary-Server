@@ -31,18 +31,23 @@ public class GetDiarySingleResponse
     @ApiModelProperty(value = "일기에 찍힌 도장 list")
     private List<StampInDiaryResponse> stampList;
 
+    @ApiModelProperty(value = "그림 일기 내용")
+    private String content;
+
     @Builder
     private GetDiarySingleResponse(
         Long diaryId,
         String imageUrl,
         Weather weather,
         LocalDateTime createdDate,
-        List<StampInDiaryResponse> stampList)
+        List<StampInDiaryResponse> stampList,
+        String content)
     {
         this.diaryId = diaryId;
         this.imageUrl = imageUrl;
         this.weather = weather;
         this.createdDate = createdDate;
         this.stampList = stampList;
+        this.content = content;
     }
 }

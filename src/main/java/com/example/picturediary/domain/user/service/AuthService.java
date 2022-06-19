@@ -89,7 +89,8 @@ public class AuthService
             throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYPE_ERROR);
     }
 
-    public void logout()
+    public void leave()
     {
+
     }
 }

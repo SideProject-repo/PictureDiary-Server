@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -30,7 +29,7 @@ public class StampController
     @ApiOperation("일기에 도장 추가")
     @PostMapping
     public ResponseEntity<CommonResponse> addStamp(
-        @RequestBody AddStampRequest addStampRequest,
+        AddStampRequest addStampRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
         stampService.addStamp(addStampRequest, user);

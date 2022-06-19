@@ -11,4 +11,6 @@ public enum Weather
     SNOW("Snow");
 
     private String value;
+
+    public static final String ALLOWABLE_VALUES = "SUN,CLOUD,RAIN,SNOW";
 }

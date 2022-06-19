@@ -26,23 +26,23 @@ public class AuthController
 
     @ApiOperation("회원 가입")
     @PostMapping("/sign-up")
-    public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest)
+    public SignUpResponse signUp(SignUpRequest signUpRequest)
     {
         return authService.signUp(signUpRequest);
     }
 
     @ApiOperation("로그인")
     @PostMapping("/sign-in")
-    public SignInResponse signIn(@RequestBody SignInRequest signInRequest)
+    public SignInResponse signIn(SignInRequest signInRequest)
     {
         return authService.signIn(signInRequest);
     }
 
-    @ApiOperation("로그아웃")
-    @PostMapping("/logout")
+    @ApiOperation("탈퇴")
+    @PostMapping("/leave")
     public void logout()
     {
-        authService.logout();
+        authService.leave();
     }
 
 }
