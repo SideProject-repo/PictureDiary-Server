@@ -15,7 +15,7 @@ import java.net.URL;
 @Service
 public class GoogleTokenService
 {
-    private static final String googleUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
+    private static final String googleUrl = "https://oauth2.googleapis.com/tokeninfo?id_token=";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -29,7 +29,7 @@ public class GoogleTokenService
     {
         try {
             JsonNode jsonResponse = objectMapper.readTree(response);
-            return jsonResponse.get("userid").toString();
+            return jsonResponse.get("email").toString();
         }
         catch (Exception e) {
             throw new CustomError(ErrorCodes.JSON_PARSING_ERROR);
