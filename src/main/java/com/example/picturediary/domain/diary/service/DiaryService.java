@@ -31,10 +31,10 @@ public class DiaryService
         this.s3Util = s3Util;
     }
 
-    public void createDiary(CreateDiaryRequest createDiaryRequest, UserDetails user)
+    public GetDiaryListResponse createDiary(CreateDiaryRequest createDiaryRequest, UserDetails user)
     {
-        Diary diary = Diary.of(createDiaryRequest, user);
-        diaryRepository.save(diary);
+        Diary saved = diaryRepository.save(Diary.of(createDiaryRequest, user));
+        return GetDiaryListResponse.of(saved);
     }
 
     public UploadDiaryImageResponse uploadDiaryImage(MultipartFile image)
