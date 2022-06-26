@@ -41,12 +41,12 @@ public class DiaryController
 
     @ApiOperation("일기 생성")
     @PostMapping
-    public ResponseEntity<CommonResponse> createDiary(
+    public ResponseEntity<GetDiaryListResponse> createDiary(
         CreateDiaryRequest createDiaryRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
-        diaryService.createDiary(createDiaryRequest, user);
-        return new ResponseEntity<>(new CommonResponse("일기 생성 성공"), HttpStatus.OK);
+        GetDiaryListResponse response = diaryService.createDiary(createDiaryRequest, user);
+        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
     @ApiOperation("일기 이미지 업로드")
