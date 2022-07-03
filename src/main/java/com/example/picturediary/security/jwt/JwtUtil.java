@@ -23,7 +23,7 @@ public class JwtUtil
 
     private static final String CLAIM_KEY_USER = "userId";
 
-    public static String createAccessToken(String userId)
+    public static String createAccessToken(Long userId)
     {
         Date date = new Date();
 
@@ -35,7 +35,7 @@ public class JwtUtil
             .compact();
     }
 
-    public static String createInfiniteToken(String userId)
+    public static String createInfiniteToken(Long userId)
     {
         Date date = new Date();
 
