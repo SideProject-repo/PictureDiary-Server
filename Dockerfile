@@ -1,6 +1,5 @@
 FROM openjdk:11.0.10-jre-slim-buster
 
-RUN apk add --no-cache tzdata
 ENV TZ Asia/Seoul
 
 ARG JAR_FILE=build/libs/picture-diary-0.0.1-SNAPSHOT.jar
