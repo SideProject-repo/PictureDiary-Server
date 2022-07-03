@@ -7,5 +7,5 @@ public interface UserRepository extends JpaRepository<DiaryUser, Long>
 {
     boolean existsBySocialId(String socialId);
 
-    long findUserIdBySocialId(String socialId);
+    DiaryUser getDiaryUserBySocialId(String socialId);
 }

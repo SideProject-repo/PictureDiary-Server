@@ -64,11 +64,11 @@ public class AuthService
     {
         String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialToken());
 
-        Long userId = userRepository.findUserIdBySocialId(socialId);
+        DiaryUser user = userRepository.getDiaryUserBySocialId(socialId);
 
-        if (!ObjectUtils.isEmpty(userId))
+        if (!ObjectUtils.isEmpty(user))
         {
-            String accessToken = JwtUtil.createAccessToken(userId);
+            String accessToken = JwtUtil.createAccessToken(user.getUserId());
 
             return SignInResponse.builder()
                 .accessToken(accessToken)
