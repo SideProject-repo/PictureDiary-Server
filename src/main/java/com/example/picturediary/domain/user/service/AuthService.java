@@ -13,6 +13,7 @@ import com.example.picturediary.security.jwt.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service
 public class AuthService
@@ -45,9 +46,9 @@ public class AuthService
                 .socialId(socialId)
                 .build();
 
-            userRepository.save(diaryUser);
+            DiaryUser user = userRepository.save(diaryUser);
 
-            String accessToken = JwtUtil.createAccessToken(socialId);
+            String accessToken = JwtUtil.createAccessToken(user.getUserId());
 
             return SignUpResponse.builder()
                 .accessToken(accessToken)
@@ -63,9 +64,11 @@ public class AuthService
     {
         String socialId = getUserIdFromSocialToken(signInRequest.getSocialType(), signInRequest.getSocialToken());
 
-        if (userRepository.existsBySocialId(socialId))
+        DiaryUser user = userRepository.getDiaryUserBySocialId(socialId);
+
+        if (!ObjectUtils.isEmpty(user))
         {
-            String accessToken = JwtUtil.createAccessToken(socialId);
+            String accessToken = JwtUtil.createAccessToken(user.getUserId());
 
             return SignInResponse.builder()
                 .accessToken(accessToken)
