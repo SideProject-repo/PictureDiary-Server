@@ -13,7 +13,7 @@ public class PictureDiaryUserDetails implements UserDetails
 
     public PictureDiaryUserDetails(Object userId)
     {
-        this.userId = (String) userId;
+        this.userId = userId.toString();
     }
 
     @Override
