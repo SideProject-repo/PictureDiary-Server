@@ -7,10 +7,13 @@ import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.domain.user.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,11 +41,11 @@ public class AuthController
         return authService.signIn(signInRequest);
     }
 
-    @ApiOperation("탈퇴")
+    @ApiOperation("탈퇴 - 로그인/회원가입시 발급한 JWT 토큰 필요")
     @PostMapping("/leave")
-    public void logout()
+    public void logout(@AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
-        authService.leave();
+        authService.leave(user);
     }
 
 }

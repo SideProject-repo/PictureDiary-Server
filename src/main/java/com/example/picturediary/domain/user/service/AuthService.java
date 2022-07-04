@@ -12,6 +12,7 @@ import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.security.jwt.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -92,8 +93,8 @@ public class AuthService
             throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYPE_ERROR);
     }
 
-    public void leave()
+    public void leave(UserDetails user)
     {
-
+        userRepository.deleteDiaryUserByUserId(Long.parseLong(user.getUsername()));
     }
 }
