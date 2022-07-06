@@ -9,5 +9,5 @@ public interface UserRepository extends JpaRepository<DiaryUser, Long>
 
     DiaryUser getDiaryUserBySocialId(String socialId);
 
-    void deleteDiaryUserByUserId(long userId);
+    void deleteByUserId(long userId);
 }
