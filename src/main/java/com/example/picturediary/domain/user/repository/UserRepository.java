@@ -8,4 +8,6 @@ public interface UserRepository extends JpaRepository<DiaryUser, Long>
     boolean existsBySocialId(String socialId);
 
     DiaryUser getDiaryUserBySocialId(String socialId);
+
+    void deleteByUserId(long userId);
 }
