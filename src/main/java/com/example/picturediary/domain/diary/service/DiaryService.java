@@ -84,9 +84,9 @@ public class DiaryService
         return GetDiarySingleResponse.of(diary);
     }
 
-    public GetDiarySingleResponse getRandomDiary()
+    public GetDiarySingleResponse getRandomDiary(UserDetails user)
     {
-        Diary diary = diaryRepository.getRandomDiary();
+        Diary diary = diaryRepository.getRandomDiary(Long.parseLong(user.getUsername()));
         diary.setStampList(stampRepository.findAllByDiaryDiaryId(diary.getDiaryId()));
 
         return GetDiarySingleResponse.of(diary);

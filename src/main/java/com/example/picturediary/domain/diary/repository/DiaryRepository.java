@@ -32,7 +32,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>
             "FROM " +
                 "( SELECT * " +
                 "FROM DIARY d " +
+                "WHERE USER_ID != (:userId) " +
                 "ORDER BY DBMS_RANDOM.RANDOM) d " +
             "where rownum <= 1", nativeQuery = true)
-    Diary getRandomDiary();
+    Diary getRandomDiary(long userId);
 }
