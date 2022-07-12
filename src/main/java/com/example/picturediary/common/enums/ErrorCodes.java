@@ -17,7 +17,8 @@ public enum ErrorCodes
     NOT_EXIST_SOCIAL_TYPE_ERROR("존재하지 않는 소셜 로그인 타입입니다.", 1000007),
     GOOGLE_SERVER_ERROR("구글 서버 접속 중 에러가 발생했습니다.", 1000008),
     FILE_UPLOAD_ERROR("S3에 업로드 중 에러가 발생했습니다.", 1000009),
-    APPLE_SERVER_ERROR("애플 서버에 접속 중 에러가 발생했습니다.", 1000010)
+    APPLE_SERVER_ERROR("애플 서버에 접속 중 에러가 발생했습니다.", 1000010),
+    NOT_EXIST_DIARY_ID("존재하지 않는 diary id 입니다.", 100011)
     ;
 
     private String errorMessage;

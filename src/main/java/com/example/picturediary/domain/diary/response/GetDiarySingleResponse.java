@@ -1,6 +1,7 @@
 package com.example.picturediary.domain.diary.response;
 
 import com.example.picturediary.common.enums.Weather;
+import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.stamp.response.StampInDiaryResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -49,5 +51,21 @@ public class GetDiarySingleResponse
         this.createdDate = createdDate;
         this.stampList = stampList;
         this.content = content;
+    }
+
+    public static GetDiarySingleResponse of(Diary diary)
+    {
+        return GetDiarySingleResponse.builder()
+            .diaryId(diary.getDiaryId())
+            .imageUrl(diary.getImageUrl())
+            .weather(diary.getWeather())
+            .createdDate(diary.getCreatedDate())
+            .stampList(
+                diary.getStampList().stream()
+                    .map(StampInDiaryResponse::of)
+                    .collect(Collectors.toList())
+            )
+            .content(diary.getContent())
+            .build();
     }
 }

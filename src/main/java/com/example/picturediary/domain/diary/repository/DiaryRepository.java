@@ -26,4 +26,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>
     List<Diary> getDiaryList(Long lastDiaryId, Long size);
 
     Diary getDiaryByDiaryId(Long diaryId);
+
+    @Query(value =
+        "SELECT * " +
+            "FROM " +
+                "( SELECT * " +
+                "FROM DIARY d " +
+                "ORDER BY DBMS_RANDOM.RANDOM) d " +
+            "where rownum <= 1", nativeQuery = true)
+    Diary getRandomDiary();
 }

@@ -87,4 +87,12 @@ public class DiaryController
         return new ResponseEntity(diary, HttpStatus.OK);
     }
 
+    @ApiOperation("랜덤 일기 단건 조회")
+    @GetMapping(value = "/random")
+    public ResponseEntity<GetDiarySingleResponse> getRandomDiary()
+    {
+        GetDiarySingleResponse diary = diaryService.getRandomDiary();
+        return new ResponseEntity(diary, HttpStatus.OK);
+    }
+
 }
