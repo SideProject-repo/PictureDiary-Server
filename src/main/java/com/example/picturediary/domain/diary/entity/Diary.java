@@ -31,7 +31,7 @@ public class Diary extends BaseTimeEntity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long diaryId;
 
-    private Long userId;
+    private Long  userId;
 
     private String imageUrl;
 

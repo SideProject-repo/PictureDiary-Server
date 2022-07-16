@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@ApiModel(value = "일기 단건 조회 시 응답")
-public class GetDiarySingleResponse
+@ApiModel(value = "일기 단건 및 일기에 찍힌 도장 응답")
+public class SingleDiaryWithStampResponse
 {
     @ApiModelProperty(value = "일기 id")
     private Long diaryId;
@@ -37,7 +37,7 @@ public class GetDiarySingleResponse
     private String content;
 
     @Builder
-    private GetDiarySingleResponse(
+    private SingleDiaryWithStampResponse(
         Long diaryId,
         String imageUrl,
         Weather weather,
@@ -53,9 +53,9 @@ public class GetDiarySingleResponse
         this.content = content;
     }
 
-    public static GetDiarySingleResponse of(Diary diary)
+    public static SingleDiaryWithStampResponse of(Diary diary)
     {
-        return GetDiarySingleResponse.builder()
+        return SingleDiaryWithStampResponse.builder()
             .diaryId(diary.getDiaryId())
             .imageUrl(diary.getImageUrl())
             .weather(diary.getWeather())

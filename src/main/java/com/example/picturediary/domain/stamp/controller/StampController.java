@@ -1,6 +1,7 @@
 package com.example.picturediary.domain.stamp.controller;
 
 import com.example.picturediary.common.response.CommonResponse;
+import com.example.picturediary.domain.diary.response.SingleDiaryWithStampResponse;
 import com.example.picturediary.domain.stamp.request.AddStampRequest;
 import com.example.picturediary.domain.stamp.service.StampService;
 import io.swagger.annotations.ApiOperation;
@@ -9,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/stamp")
