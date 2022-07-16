@@ -6,13 +6,14 @@ import com.example.picturediary.common.util.S3Util;
 import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.diary.repository.DiaryRepository;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
+import com.example.picturediary.domain.diary.response.RandomSingleDiaryWithStampResponse;
 import com.example.picturediary.domain.diary.response.SingleDiaryResponse;
 import com.example.picturediary.domain.diary.response.SingleDiaryWithStampResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
-import com.example.picturediary.domain.stamp.repository.StampRepository;
 import com.example.picturediary.domain.user.entity.DiaryUser;
 import com.example.picturediary.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +28,16 @@ import java.util.stream.Collectors;
 public class DiaryService
 {
     private final DiaryRepository diaryRepository;
-    private final StampRepository stampRepository;
     private final UserRepository userRepository;
     private final S3Util s3Util;
 
     @Autowired
     public DiaryService(
         DiaryRepository diaryRepository,
-        StampRepository stampRepository,
         UserRepository userRepository,
         S3Util s3Util)
     {
         this.diaryRepository = diaryRepository;
-        this.stampRepository = stampRepository;
         this.userRepository = userRepository;
         this.s3Util = s3Util;
     }
@@ -91,12 +89,15 @@ public class DiaryService
         return SingleDiaryWithStampResponse.of(diary);
     }
 
-    public SingleDiaryWithStampResponse getRandomDiary(UserDetails user)
+    public RandomSingleDiaryWithStampResponse getRandomDiary(UserDetails user)
     {
-        Diary diary = diaryRepository.getRandomDiary(Long.parseLong(user.getUsername()));
-        diary.setStampList(stampRepository.findAllByDiaryDiaryId(diary.getDiaryId()));
+        Diary randomDiary = diaryRepository
+            .getRandomDiary(
+                Long.parseLong(user.getUsername()),
+                PageRequest.of(0, 1))
+            .get(0);
 
-        return SingleDiaryWithStampResponse.of(diary);
+        return RandomSingleDiaryWithStampResponse.of(randomDiary, Long.parseLong(user.getUsername()));
     }
 
     public List<SingleDiaryWithStampResponse> getNewStampDiaryList(UserDetails user)

@@ -69,4 +69,11 @@ public class Stamp extends BaseTimeEntity
             .userId(Long.parseLong(user.getUsername()))
             .build();
     }
+
+    public boolean isSameUserId(long userId)
+    {
+        if (this.userId.equals(userId))
+            return true;
+        return false;
+    }
 }

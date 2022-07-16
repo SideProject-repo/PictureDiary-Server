@@ -2,6 +2,7 @@ package com.example.picturediary.domain.diary.controller;
 
 import com.example.picturediary.common.response.CommonResponse;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
+import com.example.picturediary.domain.diary.response.RandomSingleDiaryWithStampResponse;
 import com.example.picturediary.domain.diary.response.SingleDiaryResponse;
 import com.example.picturediary.domain.diary.response.SingleDiaryWithStampResponse;
 import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
@@ -88,9 +89,9 @@ public class DiaryController
 
     @ApiOperation("랜덤 일기 단건 조회")
     @GetMapping(value = "/random")
-    public ResponseEntity<SingleDiaryWithStampResponse> getRandomDiary(@AuthenticationPrincipal @ApiIgnore UserDetails user)
+    public ResponseEntity<RandomSingleDiaryWithStampResponse> getRandomDiary(@AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
-        SingleDiaryWithStampResponse diary = diaryService.getRandomDiary(user);
+        RandomSingleDiaryWithStampResponse diary = diaryService.getRandomDiary(user);
         return new ResponseEntity(diary, HttpStatus.OK);
     }
 

@@ -52,9 +52,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
         {
             ResponseUtil.doResponse(response, ErrorCodes.JWT_ILLEGAL_AUTH_TOKEN);
         }
-        catch (Exception e)
-        {
-            ResponseUtil.doResponse(response, ErrorCodes.JWT_AUTH_TOKEN_VALIDATION_ERROR);
-        }
     }
 }
