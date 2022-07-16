@@ -10,7 +10,7 @@ public class JwtUtilTest
     @Test
     public void createInfiniteToken()
     {
-        String infiniteToken = JwtUtil.createInfiniteToken(12345L);
+        String infiniteToken = JwtUtil.createInfiniteToken(1L);
 
         System.out.println(infiniteToken);
     }

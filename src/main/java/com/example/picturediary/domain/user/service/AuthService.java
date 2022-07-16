@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
+
+@Transactional
 @Service
 public class AuthService
 {
@@ -46,6 +49,7 @@ public class AuthService
         {
             DiaryUser diaryUser = DiaryUser.builder()
                 .socialId(socialId)
+                .lastAccessDateTime(LocalDateTime.now())
                 .build();
 
             DiaryUser user = userRepository.save(diaryUser);
@@ -94,7 +98,6 @@ public class AuthService
             throw new CustomError(ErrorCodes.NOT_EXIST_SOCIAL_TYPE_ERROR);
     }
 
-    @Transactional
     public void leave(UserDetails user)
     {
         userRepository.deleteByUserId(Long.parseLong(user.getUsername()));

@@ -4,6 +4,7 @@ import com.example.picturediary.domain.diary.entity.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long>
@@ -36,4 +37,12 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>
                 "ORDER BY DBMS_RANDOM.RANDOM) d " +
             "where rownum <= 1", nativeQuery = true)
     Diary getRandomDiary(long userId);
+
+    @Query(value =
+    "SELECT d FROM " +
+        "Diary d " +
+        "JOIN fetch d.stampList s " +
+        "WHERE d.userId = (:userId) " +
+        "AND s.createdDate > (:lastAccessTime)")
+    List<Diary> getDiaryByDiaryIdAndStampCreatedAtBefore(long userId, LocalDateTime lastAccessTime);
 }

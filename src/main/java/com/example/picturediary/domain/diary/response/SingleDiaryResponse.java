@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ApiModel(value = "일기 리스트 조회 시 개별 응답")
-public class GetDiaryListResponse
+@ApiModel(value = "일기 단건 응답")
+public class SingleDiaryResponse
 {
     @ApiModelProperty(value = "일기 id")
     private Long diaryId;
@@ -28,7 +28,7 @@ public class GetDiaryListResponse
     private LocalDateTime createdDate;
 
     @Builder
-    private GetDiaryListResponse(
+    private SingleDiaryResponse(
         Long diaryId,
         String imageUrl,
         Weather weather,
@@ -40,9 +40,9 @@ public class GetDiaryListResponse
         this.createdDate = createdDate;
     }
 
-    public static GetDiaryListResponse of (Diary diary)
+    public static SingleDiaryResponse of (Diary diary)
     {
-        return GetDiaryListResponse.builder()
+        return SingleDiaryResponse.builder()
             .diaryId(diary.getDiaryId())
             .imageUrl(diary.getImageUrl())
             .weather(diary.getWeather())
