@@ -19,7 +19,9 @@ public enum ErrorCodes
     FILE_UPLOAD_ERROR("S3에 업로드 중 에러가 발생했습니다.", 1000009),
     APPLE_SERVER_ERROR("애플 서버에 접속 중 에러가 발생했습니다.", 1000010),
     NOT_EXIST_DIARY_ID("존재하지 않는 diary id 입니다.", 100011),
-    UNVALID_LAST_ACCESS_DATE_TIME("유효하지 않은 마지막 접속 시간입니다.", 100012)
+    UNVALID_LAST_ACCESS_DATE_TIME("유효하지 않은 마지막 접속 시간입니다.", 100012),
+    JWT_TOKEN_ERROR("JWT 토큰 에러가 발생했습니다", 100013),
+    INVALID_REFRESH_TOKEN_ERROR("유효하지 않은 refresh token 입니다.", 100014)
     ;
 
     private String errorMessage;

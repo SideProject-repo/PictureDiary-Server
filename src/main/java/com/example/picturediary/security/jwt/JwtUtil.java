@@ -19,7 +19,10 @@ public class JwtUtil
     private String secretKey = "com.picturediary.secret";
 
     @Value("${spring.security.access-token-valid-time}")
-    private String accessTokenValidTime = "1000000000000";
+    private String accessTokenValidTime = "7 * 24 * 60 * 60 * 60 * 1000";
+
+    @Value("${spring.security.refresh-token-valid-time}")
+    private String refreshTokenValidTime = "3 * 30 * 24 * 60 * 60 * 60 * 1000";
 
     private static final String CLAIM_KEY_USER = "userId";
 
@@ -30,6 +33,18 @@ public class JwtUtil
         return Jwts.builder()
             .setIssuedAt(date)
             .setExpiration(new Date(date.getTime() + Long.parseLong(accessTokenValidTime)))
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .claim(CLAIM_KEY_USER, userId)
+            .compact();
+    }
+
+    public static String createRefreshToken(Long userId)
+    {
+        Date date = new Date();
+
+        return Jwts.builder()
+            .setIssuedAt(date)
+            .setExpiration(new Date(date.getTime() + Long.parseLong(refreshTokenValidTime)))
             .signWith(SignatureAlgorithm.HS256, secretKey)
             .claim(CLAIM_KEY_USER, userId)
             .compact();
@@ -46,10 +61,10 @@ public class JwtUtil
             .compact();
     }
 
-    public static String getTokenFromHeader(HttpServletRequest httpServletRequest)
+    public static String getAccessTokenFromHeader(HttpServletRequest httpServletRequest)
     {
-        String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        return token.replace("Bearer", "").trim();
+        String accessToken = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        return accessToken.replace("Bearer", "").trim();
     }
 
     public static String getUserIdFromSecurityContextHolder()

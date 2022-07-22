@@ -7,9 +7,11 @@ import com.example.picturediary.domain.user.entity.DiaryUser;
 import com.example.picturediary.domain.user.repository.UserRepository;
 import com.example.picturediary.domain.user.request.SignInRequest;
 import com.example.picturediary.domain.user.request.SignUpRequest;
+import com.example.picturediary.domain.user.response.ReissueAccessTokenResponse;
 import com.example.picturediary.domain.user.response.SignInResponse;
 import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.security.jwt.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,9 +57,11 @@ public class AuthService
             DiaryUser user = userRepository.save(diaryUser);
 
             String accessToken = JwtUtil.createAccessToken(user.getUserId());
+            String refreshToken = JwtUtil.createRefreshToken(user.getUserId());
 
             return SignUpResponse.builder()
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
         }
         else
@@ -75,9 +79,11 @@ public class AuthService
         if (!ObjectUtils.isEmpty(user))
         {
             String accessToken = JwtUtil.createAccessToken(user.getUserId());
+            String refreshToken = JwtUtil.createRefreshToken(user.getUserId());
 
             return SignInResponse.builder()
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
         }
         else
@@ -101,5 +107,23 @@ public class AuthService
     public void leave(UserDetails user)
     {
         userRepository.deleteByUserId(Long.parseLong(user.getUsername()));
+    }
+
+    public ReissueAccessTokenResponse reissueAccessToken(String refreshToken)
+    {
+        try {
+            Claims claims = JwtUtil.parseToken(refreshToken);
+            String userId = JwtUtil.getUserDetailsFromClaims(claims).getUsername();
+
+            String accessToken = JwtUtil.createAccessToken(Long.parseLong(userId));
+
+            return ReissueAccessTokenResponse.builder()
+                .accessToken(accessToken)
+                .build();
+        }
+        catch (Exception e)
+        {
+            throw new CustomError(ErrorCodes.INVALID_REFRESH_TOKEN_ERROR);
+        }
     }
 }
