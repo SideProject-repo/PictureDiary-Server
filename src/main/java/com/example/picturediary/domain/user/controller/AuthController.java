@@ -3,6 +3,7 @@ package com.example.picturediary.domain.user.controller;
 import com.example.picturediary.common.response.CommonResponse;
 import com.example.picturediary.domain.user.request.SignInRequest;
 import com.example.picturediary.domain.user.request.SignUpRequest;
+import com.example.picturediary.domain.user.response.ReissueAccessTokenResponse;
 import com.example.picturediary.domain.user.response.SignInResponse;
 import com.example.picturediary.domain.user.response.SignUpResponse;
 import com.example.picturediary.domain.user.service.AuthService;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -50,6 +52,13 @@ public class AuthController
     {
         authService.leave(user);
         return new ResponseEntity("user id " + user.getUsername() + "님의 탈퇴 성공", HttpStatus.OK);
+    }
+
+    @ApiOperation("access token 재발급 - 그림 일기 refresh token 으로 요청")
+    @PostMapping("/reissue/access-token")
+    public ReissueAccessTokenResponse reissueAccessToken(@RequestBody String refreshToken)
+    {
+        return authService.reissueAccessToken(refreshToken);
     }
 
 }

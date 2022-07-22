@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 "/favicon.ico",
                 "/dont-pass-filter",
                 "/auth/sign-up",
-                "/auth/sign-in"
+                "/auth/sign-in",
+                "/auth/reissue/access-token"
         );
     }
 
