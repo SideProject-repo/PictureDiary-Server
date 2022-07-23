@@ -9,12 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@ApiModel(value = "로그인 응답")
-public class SignInResponse
+@ApiModel(value = "access token 재발급 응답")
+public class ReissueAccessTokenResponse
 {
     @ApiModelProperty(value = "그림 일기 access token")
     String accessToken;
-
-    @ApiModelProperty(value = "그림 일기 refresh token")
-    String refreshToken;
 }
