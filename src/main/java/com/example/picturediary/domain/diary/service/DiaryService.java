@@ -3,6 +3,7 @@ package com.example.picturediary.domain.diary.service;
 import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
 import com.example.picturediary.common.util.S3Util;
+import com.example.picturediary.domain.diary.dto.DiaryWithStampListDto;
 import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.diary.repository.DiaryRepository;
 import com.example.picturediary.domain.diary.request.CreateDiaryRequest;
@@ -13,7 +14,6 @@ import com.example.picturediary.domain.diary.response.UploadDiaryImageResponse;
 import com.example.picturediary.domain.user.entity.DiaryUser;
 import com.example.picturediary.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,11 +91,7 @@ public class DiaryService
 
     public RandomSingleDiaryWithStampResponse getRandomDiary(UserDetails user)
     {
-        Diary randomDiary = diaryRepository
-            .getRandomDiary(
-                Long.parseLong(user.getUsername()),
-                PageRequest.of(0, 1))
-            .get(0);
+        DiaryWithStampListDto randomDiary = diaryRepository.getRandomDiary(Long.parseLong(user.getUsername()));
 
         return RandomSingleDiaryWithStampResponse.of(randomDiary, Long.parseLong(user.getUsername()));
     }
