@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Setter
@@ -31,10 +32,13 @@ public class Diary extends BaseTimeEntity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long diaryId;
 
+    @NotNull
     private Long  userId;
 
+    @NotNull
     private String imageUrl;
 
+    @NotNull
     private Weather weather;
 
     @Lob

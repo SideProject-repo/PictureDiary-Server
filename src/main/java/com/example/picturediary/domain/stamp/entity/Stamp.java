@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -30,16 +31,21 @@ public class Stamp extends BaseTimeEntity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long stampId;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    @NotNull
     private StampType stampType;
 
+    @NotNull
     private double x;
 
+    @NotNull
     private double y;
 
+    @NotNull
     private Long userId;
 
     @Builder

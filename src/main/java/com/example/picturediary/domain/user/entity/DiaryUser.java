@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,8 +25,10 @@ public class DiaryUser extends BaseTimeEntity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
+    @NotNull
     private String socialId;
 
+    @NotNull
     private LocalDateTime lastAccessDateTime;
 
     @Builder
