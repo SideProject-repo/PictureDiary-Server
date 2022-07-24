@@ -19,10 +19,10 @@ public class JwtUtil
     private String secretKey = "com.picturediary.secret";
 
     @Value("${spring.security.access-token-valid-time}")
-    private String accessTokenValidTime = "7 * 24 * 60 * 60 * 60 * 1000";
+    private String accessTokenValidTime = "36288000000";
 
     @Value("${spring.security.refresh-token-valid-time}")
-    private String refreshTokenValidTime = "3 * 30 * 24 * 60 * 60 * 60 * 1000";
+    private String refreshTokenValidTime = "466560000000";
 
     private static final String CLAIM_KEY_USER = "userId";
 
