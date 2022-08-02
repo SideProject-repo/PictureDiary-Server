@@ -1,7 +1,7 @@
 package com.example.picturediary.domain.diary.response;
 
 import com.example.picturediary.common.enums.Weather;
-import com.example.picturediary.domain.diary.entity.Diary;
+import com.example.picturediary.domain.diary.dto.DiaryWithStampListDto;
 import com.example.picturediary.domain.stamp.entity.Stamp;
 import com.example.picturediary.domain.stamp.response.StampInDiaryResponse;
 import io.swagger.annotations.ApiModel;
@@ -11,8 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -59,14 +59,12 @@ public class RandomSingleDiaryWithStampResponse
         this.isStamped = isStamped;
     }
 
-    public static RandomSingleDiaryWithStampResponse of(Diary diary, long userId)
+    public static RandomSingleDiaryWithStampResponse of(DiaryWithStampListDto diary, long userId)
     {
-        List<StampInDiaryResponse> stampList = new ArrayList<>();
         boolean isStamped = false;
 
         for (Stamp stamp : diary.getStampList())
         {
-            stampList.add(StampInDiaryResponse.of(stamp));
             if(stamp.isSameUserId(userId)) isStamped = true;
         }
 
@@ -75,7 +73,11 @@ public class RandomSingleDiaryWithStampResponse
             .imageUrl(diary.getImageUrl())
             .weather(diary.getWeather())
             .createdDate(diary.getCreatedDate())
-            .stampList(stampList)
+            .stampList(
+                diary.getStampList().stream()
+                    .map(StampInDiaryResponse::of)
+                    .collect(Collectors.toList())
+            )
             .content(diary.getContent())
             .isStamped(isStamped)
             .build();
