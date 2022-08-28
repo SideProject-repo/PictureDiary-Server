@@ -13,4 +13,5 @@ public enum Weather
     private String value;
 
     public static final String ALLOWABLE_VALUES = "SUN,CLOUD,RAIN,SNOW";
+    public static final String REG_EXP = "SUN|CLOUD|RAIN|SNOW";
 }

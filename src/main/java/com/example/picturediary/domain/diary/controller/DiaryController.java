@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class DiaryController
     @ApiOperation("일기 생성")
     @PostMapping
     public ResponseEntity<SingleDiaryResponse> createDiary(
-        CreateDiaryRequest createDiaryRequest,
+        @Valid CreateDiaryRequest createDiaryRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
         SingleDiaryResponse response = diaryService.createDiary(createDiaryRequest, user);
@@ -107,7 +108,7 @@ public class DiaryController
     /**
      * 사용되는 도메인 로직상 user 패키지 안에 있는 것이 적합해보이지만 getNewStampDiaryListAfterLastAccess와 함께 호출되는 api이므로 이곳에 작성
      */
-    @ApiOperation("사용장의 마지막 접속 시각 업데이트")
+    @ApiOperation("사용자의 마지막 접속 시각 업데이트")
     @PostMapping(value = "/update/last-access-time")
     public ResponseEntity<CommonResponse> updateLastAccessDateTime(@AuthenticationPrincipal @ApiIgnore UserDetails user)
     {

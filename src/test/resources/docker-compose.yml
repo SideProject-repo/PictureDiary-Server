@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  wsin-mysql:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'wsin_dev'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      TZ: Asia/Seoul
+    ports:
+      - '33006:3306'
+    volumes:
+      - ./init-wsin-schema.sql:/docker-entrypoint-initdb.d/init-wsin-schema.sql
+      - ./init-wsin-wmp-deal-schema.sql:/docker-entrypoint-initdb.d/init-wsin-wmp-deal-schema.sql
+      - ./init-wsin-wmp-escrow-batch-schema.sql:/docker-entrypoint-initdb.d/init-wsin-wmp-escrow-batch-schema.sql
+    command:
+      - 'mysqld'
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'

@@ -27,12 +27,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
     implementation 'org.apache.commons:commons-lang3:3.0'
 
@@ -52,7 +50,6 @@ dependencies {
 
     // spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
     implementation 'io.jsonwebtoken:jjwt:0.2'
 
     // swagger
@@ -68,6 +65,14 @@ dependencies {
             "javax.persistence:javax.persistence-api",
             "javax.annotation:javax.annotation-api",
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+
+    // test container
+    testImplementation "org.testcontainers:testcontainers:1.15.3"
+    testImplementation "org.testcontainers:junit-jupiter:1.15.3"
+    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+        exclude group: 'junit', module: 'junit'
+    }
+    testImplementation('org.springframework.security:spring-security-test')
 }
 
 // QueryDSL
