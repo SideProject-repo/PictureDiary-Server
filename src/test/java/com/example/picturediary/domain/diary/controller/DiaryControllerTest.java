@@ -1,12 +1,18 @@
 package com.example.picturediary.domain.diary.controller;
 
-import com.example.picturediary.IntegrationTest;
 import com.example.picturediary.common.enums.Weather;
 import com.example.picturediary.common.util.StaticUtil;
+import com.example.picturediary.domain.diary.entity.Diary;
+import com.example.picturediary.domain.diary.repository.DiaryRepository;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,8 +21,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class DiaryControllerTest extends IntegrationTest
+@SpringBootTest
+@AutoConfigureMockMvc
+public class DiaryControllerTest
 {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private DiaryRepository diaryRepository;
+
     @Nested
     @DisplayName("일기 생성 테스트")
     class createDiaryTest
@@ -67,36 +81,55 @@ public class DiaryControllerTest extends IntegrationTest
         }
     }
 
-    @Nested
-    @DisplayName("일기 list 조회 테스트")
-    class getDiaryListTest
-    {
-        @Test
-        @DisplayName("일기 list 조회 성공")
-        void getDiaryListSuccess() throws Exception
-        {
-            mockMvc.perform(
-                get("/diary/list")
-                    .header(HttpHeaders.AUTHORIZATION, StaticUtil.INFINITE_JWT_TOKEN)
-                    .param("lastDiaryId", "1")
-                    .param("size", "1")
-            )
-                .andExpect(status().isOk())
-                .andDo(print());
-        }
-    }
-
      @Nested
-     @DisplayName("일기 단건 조회 테스트")
-     class getSingleDiaryTest
+     @DisplayName("일기 조회 테스트")
+     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+     class getDiaryTest
      {
+         private Diary testDiary;
+
+         @BeforeAll
+         void setUp()
+         {
+             // 테스트용 데이터 추가
+             testDiary = Diary.builder()
+                 .userId(1L)
+                 .imageUrl("image-url")
+                 .weather(Weather.CLOUD)
+                 .content("content")
+                 .build();
+
+             diaryRepository.save(testDiary);
+         }
+
+         @AfterAll
+         void tearDown()
+         {
+             // 테스트용 데이터 삭제
+             diaryRepository.deleteById(testDiary.getDiaryId());
+         }
+
          @Test
          @DisplayName("일기 단건 조회 성공")
          void getSingleDiarySuccess() throws Exception
          {
              mockMvc.perform(
-                 get("/diary/1")
+                 get("/diary/" + testDiary.getDiaryId())
                      .header(HttpHeaders.AUTHORIZATION, StaticUtil.INFINITE_JWT_TOKEN)
+             )
+                 .andExpect(status().isOk())
+                 .andDo(print());
+         }
+
+         @Test
+         @DisplayName("일기 list 조회 성공")
+         void getDiaryListSuccess() throws Exception
+         {
+             mockMvc.perform(
+                 get("/diary/list")
+                     .header(HttpHeaders.AUTHORIZATION, StaticUtil.INFINITE_JWT_TOKEN)
+                     .param("lastDiaryId", "1")
+                     .param("size", "1")
              )
                  .andExpect(status().isOk())
                  .andDo(print());

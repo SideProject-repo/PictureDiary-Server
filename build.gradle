@@ -66,9 +66,7 @@ dependencies {
             "javax.annotation:javax.annotation-api",
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
-    // test container
-    testImplementation "org.testcontainers:testcontainers:1.15.3"
-    testImplementation "org.testcontainers:junit-jupiter:1.15.3"
+    // test
     testImplementation ('org.springframework.boot:spring-boot-starter-test'){
         exclude group: 'junit', module: 'junit'
     }
