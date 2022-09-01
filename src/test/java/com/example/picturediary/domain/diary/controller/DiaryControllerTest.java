@@ -1,6 +1,7 @@
 package com.example.picturediary.domain.diary.controller;
 
 import com.example.picturediary.common.enums.Weather;
+import com.example.picturediary.common.exception.customerror.CustomError;
 import com.example.picturediary.common.util.StaticUtil;
 import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.diary.repository.DiaryRepository;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -118,6 +120,19 @@ public class DiaryControllerTest
                      .header(HttpHeaders.AUTHORIZATION, StaticUtil.INFINITE_JWT_TOKEN)
              )
                  .andExpect(status().isOk())
+                 .andDo(print());
+         }
+
+         @Test
+         @DisplayName("존재하지 않는 diary Id로 일기 단건 조회 시도하면 에러 리턴")
+         void getSingleDiaryFailNotExistDiaryId() throws Exception
+         {
+             mockMvc.perform(
+                 get("/diary/0")
+                     .header(HttpHeaders.AUTHORIZATION, StaticUtil.INFINITE_JWT_TOKEN)
+             )
+                 .andExpect(status().isInternalServerError())
+                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomError))
                  .andDo(print());
          }
 
