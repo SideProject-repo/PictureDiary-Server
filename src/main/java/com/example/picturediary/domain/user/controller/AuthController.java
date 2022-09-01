@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController
@@ -33,21 +35,21 @@ public class AuthController
 
     @ApiOperation("회원 가입")
     @PostMapping("/sign-up")
-    public SignUpResponse signUp(SignUpRequest signUpRequest)
+    public SignUpResponse signUp(@Valid SignUpRequest signUpRequest)
     {
         return authService.signUp(signUpRequest);
     }
 
     @ApiOperation("로그인")
     @PostMapping("/sign-in")
-    public SignInResponse signIn(SignInRequest signInRequest)
+    public SignInResponse signIn(@Valid SignInRequest signInRequest)
     {
         return authService.signIn(signInRequest);
     }
 
     @ApiOperation("탈퇴 - 로그인/회원가입시 발급한 JWT 토큰 필요")
     @PostMapping("/leave")
-    public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal @ApiIgnore UserDetails user)
+    public ResponseEntity<CommonResponse> leave(@AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
         authService.leave(user);
         return new ResponseEntity("user id " + user.getUsername() + "님의 탈퇴 성공", HttpStatus.OK);
@@ -55,9 +57,8 @@ public class AuthController
 
     @ApiOperation("access token 재발급 - 그림 일기 refresh token 으로 요청")
     @PostMapping("/reissue/access-token")
-    public ReissueAccessTokenResponse reissueAccessToken(@RequestBody String refreshToken)
+    public ReissueAccessTokenResponse reissueAccessToken(String refreshToken)
     {
         return authService.reissueAccessToken(refreshToken);
     }
-
 }

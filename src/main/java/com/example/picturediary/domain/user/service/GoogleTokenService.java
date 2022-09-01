@@ -4,7 +4,6 @@ import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -15,7 +14,7 @@ import java.net.URL;
 @Service
 public class GoogleTokenService
 {
-    private static final String googleUrl = "https://oauth2.googleapis.com/tokeninfo?id_token=";
+    private static final String GOOGLE_URL = "https://oauth2.googleapis.com/tokeninfo?id_token=";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -39,7 +38,7 @@ public class GoogleTokenService
     private String getResponseFromKakao(String socialToken)
     {
         try {
-            URL url = new URL(googleUrl + socialToken);
+            URL url = new URL(GOOGLE_URL + socialToken);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
