@@ -3,6 +3,7 @@ package com.example.picturediary.domain.user.entity;
 import com.example.picturediary.common.entity.BaseTimeEntity;
 import com.example.picturediary.common.enums.ErrorCodes;
 import com.example.picturediary.common.exception.customerror.CustomError;
+import com.example.picturediary.domain.user.request.SignUpRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,12 +32,24 @@ public class DiaryUser extends BaseTimeEntity
     @NotNull
     private LocalDateTime lastAccessDateTime;
 
+    private String socialType;
+
     @Builder
-    private DiaryUser(Long userId, String socialId, LocalDateTime lastAccessDateTime)
+    private DiaryUser(Long userId, String socialId, LocalDateTime lastAccessDateTime, String socialType)
     {
         this.userId = userId;
         this.socialId = socialId;
         this.lastAccessDateTime = lastAccessDateTime;
+        this.socialType = socialType;
+    }
+
+    public static DiaryUser of(SignUpRequest signUpRequest, String socialId)
+    {
+        return DiaryUser.builder()
+            .socialId(socialId)
+            .lastAccessDateTime(LocalDateTime.now())
+            .socialType(signUpRequest.getSocialType())
+            .build();
     }
 
     public void updateLastAccessDateTime()

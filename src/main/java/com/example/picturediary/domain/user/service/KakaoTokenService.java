@@ -15,7 +15,7 @@ import java.net.URL;
 @Service
 public class KakaoTokenService
 {
-    private static final String kakaoUrl = "https://kapi.kakao.com/v2/user/me";
+    private static final String KAKAO_URL = "https://kapi.kakao.com/v2/user/me";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -39,7 +39,7 @@ public class KakaoTokenService
     private String getResponseFromKakao(String socialToken)
     {
         try {
-            URL url = new URL(kakaoUrl);
+            URL url = new URL(KAKAO_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + socialToken);

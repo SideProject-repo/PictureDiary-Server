@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class StampController
     @ApiOperation("일기에 도장 추가")
     @PostMapping
     public ResponseEntity<CommonResponse> addStamp(
-        AddStampRequest addStampRequest,
+        @Valid AddStampRequest addStampRequest,
         @AuthenticationPrincipal @ApiIgnore UserDetails user)
     {
         stampService.addStamp(addStampRequest, user);

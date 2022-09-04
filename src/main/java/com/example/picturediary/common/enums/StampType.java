@@ -23,4 +23,7 @@ public enum StampType
 
     public static final String ALLOWABLE_VALUES = "GRAL,DOTHIS,GOOD,GREATJOB,PERFECT,OH,ZZUGUL,HUNDRED" +
         ",HOENG,INTERESTING,LOL,ZZANG";
+    public static final String REG_EXP = "GRAL|DOTHIS|GOOD|GREATJOB|PERFECT|OH|ZZUGUL|HUNDRED" +
+        "|HOENG|INTERESTING|LOL|ZZANG";
+
 }

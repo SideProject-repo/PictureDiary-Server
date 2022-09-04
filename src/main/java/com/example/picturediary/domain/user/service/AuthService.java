@@ -49,10 +49,7 @@ public class AuthService
 
         if (!userRepository.existsBySocialId(socialId))
         {
-            DiaryUser diaryUser = DiaryUser.builder()
-                .socialId(socialId)
-                .lastAccessDateTime(LocalDateTime.now())
-                .build();
+            DiaryUser diaryUser = DiaryUser.of(signUpRequest, socialId);
 
             DiaryUser user = userRepository.save(diaryUser);
 
@@ -78,6 +75,8 @@ public class AuthService
 
         if (!ObjectUtils.isEmpty(user))
         {
+            user.updateLastAccessDateTime();
+
             String accessToken = JwtUtil.createAccessToken(user.getUserId());
             String refreshToken = JwtUtil.createRefreshToken(user.getUserId());
 
@@ -106,6 +105,9 @@ public class AuthService
 
     public void leave(UserDetails user)
     {
+        if (!userRepository.existsById(Long.valueOf(user.getUsername())))
+            throw new CustomError(ErrorCodes.NOT_EXIST_USER);
+
         userRepository.deleteByUserId(Long.parseLong(user.getUsername()));
     }
 

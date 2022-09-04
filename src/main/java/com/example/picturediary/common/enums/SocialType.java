@@ -14,4 +14,6 @@ public enum SocialType
     private final String socialTypeName;
 
     public static final String ALLOWABLE_VALUES = "KAKAO,GOOGLE,APPLE";
+    public static final String REG_EXP = "KAKAO|GOOGLE|APPLE";
+
 }

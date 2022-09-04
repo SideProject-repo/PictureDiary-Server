@@ -1,5 +1,6 @@
 package com.example.picturediary.security.jwt;
 
+import com.example.picturediary.common.util.StaticUtil;
 import com.example.picturediary.security.userdetails.PictureDiaryUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,8 +25,6 @@ public class JwtUtil
     @Value("${spring.security.refresh-token-valid-time}")
     private String refreshTokenValidTime = "466560000000";
 
-    private static final String CLAIM_KEY_USER = "userId";
-
     public static String createAccessToken(Long userId)
     {
         Date date = new Date();
@@ -34,7 +33,7 @@ public class JwtUtil
             .setIssuedAt(date)
             .setExpiration(new Date(date.getTime() + Long.parseLong(accessTokenValidTime)))
             .signWith(SignatureAlgorithm.HS256, secretKey)
-            .claim(CLAIM_KEY_USER, userId)
+            .claim(StaticUtil.CLAIM_KEY_USER_ID, userId)
             .compact();
     }
 
@@ -46,7 +45,7 @@ public class JwtUtil
             .setIssuedAt(date)
             .setExpiration(new Date(date.getTime() + Long.parseLong(refreshTokenValidTime)))
             .signWith(SignatureAlgorithm.HS256, secretKey)
-            .claim(CLAIM_KEY_USER, userId)
+            .claim(StaticUtil.CLAIM_KEY_USER_ID, userId)
             .compact();
     }
 
@@ -57,7 +56,7 @@ public class JwtUtil
         return Jwts.builder()
             .setIssuedAt(date)
             .signWith(SignatureAlgorithm.HS256, secretKey)
-            .claim(CLAIM_KEY_USER, userId)
+            .claim(StaticUtil.CLAIM_KEY_USER_ID, userId)
             .compact();
     }
 
@@ -86,6 +85,6 @@ public class JwtUtil
 
     public static PictureDiaryUserDetails getUserDetailsFromClaims(Claims claims)
     {
-        return new PictureDiaryUserDetails(claims.get(CLAIM_KEY_USER));
+        return new PictureDiaryUserDetails(claims.get(StaticUtil.CLAIM_KEY_USER_ID));
     }
 }

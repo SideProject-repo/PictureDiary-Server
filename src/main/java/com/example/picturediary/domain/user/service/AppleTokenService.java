@@ -17,7 +17,7 @@ import java.util.Base64;
 @Service
 public class AppleTokenService
 {
-    private static final String appleUrl = "https://appleid.apple.com/auth/keys";
+    private static final String APPLE_URL = "https://appleid.apple.com/auth/keys";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -52,7 +52,7 @@ public class AppleTokenService
     private String authorizeAppleToken(String socialToken)
     {
         try {
-            URL url = new URL(appleUrl);
+            URL url = new URL(APPLE_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + socialToken);

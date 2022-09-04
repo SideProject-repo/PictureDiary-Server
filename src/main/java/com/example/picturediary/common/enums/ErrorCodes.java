@@ -21,7 +21,8 @@ public enum ErrorCodes
     NOT_EXIST_DIARY_ID("존재하지 않는 diary id 입니다.", 100011),
     UNVALID_LAST_ACCESS_DATE_TIME("유효하지 않은 마지막 접속 시간입니다.", 100012),
     JWT_TOKEN_ERROR("JWT 토큰 에러가 발생했습니다", 100013),
-    INVALID_REFRESH_TOKEN_ERROR("유효하지 않은 refresh token 입니다.", 100014)
+    INVALID_REFRESH_TOKEN_ERROR("유효하지 않은 refresh token 입니다.", 100014),
+    NOT_EXIST_USER("존재하지 않는 회원입니다.", 100015)
     ;
 
     private String errorMessage;
