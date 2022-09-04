@@ -10,4 +10,4 @@ COPY ${PROPERTIES_FILE} application.yml
 
 ADD src/main/resources/Wallet_sideproject Wallet_sideproject
 
-ENTRYPOINT ["java", "-jar", "/app.jar", "-Dspring.config.location=/application.yml"]
+ENTRYPOINT ["java", "-jar", "-x", "test",  "/app.jar", "-Dspring.config.location=/application.yml"]
