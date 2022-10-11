@@ -8,7 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @ApiModel(value = "랜덤 일기 단건 응답")
 public class RandomSingleDiaryWithStampResponse
 {
@@ -38,7 +41,7 @@ public class RandomSingleDiaryWithStampResponse
     private String content;
 
     @ApiModelProperty(value = "사용자가 자신이 해당 일기에 도장을 찍었는지 여부, 찍었으면 - true / 안 찍었으면 - false")
-    private boolean isStamped;
+    private Boolean isStamped;
 
     @Builder
     private RandomSingleDiaryWithStampResponse(
@@ -48,7 +51,7 @@ public class RandomSingleDiaryWithStampResponse
         LocalDateTime createdDate,
         List<StampInDiaryResponse> stampList,
         String content,
-        boolean isStamped)
+        Boolean isStamped)
     {
         this.diaryId = diaryId;
         this.imageUrl = imageUrl;

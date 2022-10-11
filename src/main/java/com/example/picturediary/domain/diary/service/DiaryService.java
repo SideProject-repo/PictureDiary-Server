@@ -93,6 +93,11 @@ public class DiaryService
     {
         DiaryWithStampListDto randomDiary = diaryRepository.getRandomDiary(Long.parseLong(user.getUsername()));
 
+        if (DiaryWithStampListDto.isNull(randomDiary))
+        {
+            return RandomSingleDiaryWithStampResponse.builder().build();
+        }
+
         return RandomSingleDiaryWithStampResponse.of(randomDiary, Long.parseLong(user.getUsername()));
     }
 
