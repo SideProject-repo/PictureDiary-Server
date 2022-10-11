@@ -5,13 +5,16 @@ import com.example.picturediary.domain.diary.entity.Diary;
 import com.example.picturediary.domain.stamp.entity.Stamp;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class DiaryWithStampListDto
 {
     private Long diaryId;
@@ -40,6 +43,11 @@ public class DiaryWithStampListDto
 
     public static DiaryWithStampListDto of(Diary diary)
     {
+        if (ObjectUtils.isEmpty(diary))
+        {
+            return DiaryWithStampListDto.builder().build();
+        }
+
         return DiaryWithStampListDto.builder()
             .diaryId(diary.getDiaryId())
             .imageUrl(diary.getImageUrl())
@@ -48,5 +56,17 @@ public class DiaryWithStampListDto
             .stampList(diary.getStampList())
             .content(diary.getContent())
             .build();
+    }
+
+    public static boolean isNull(DiaryWithStampListDto diary)
+    {
+        // 모든 필드가 null 인지 확인
+        return (diary.getDiaryId() == null)
+            && (diary.getImageUrl() == null)
+            && (diary.getWeather() == null)
+            && (diary.getCreatedDate() == null)
+            && (diary.getStampList() == null)
+            && (diary.getContent() == null)
+            ;
     }
 }
